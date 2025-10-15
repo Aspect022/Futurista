@@ -1,0 +1,144 @@
+<svg viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Motion blur effect -->
+    <filter id="motion-blur">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="2,0"></feGaussianBlur>
+    </filter>
+  </defs>
+  
+  <!-- Car body group with subtle horizontal motion -->
+  <g id="car-body">
+    <animateTransform attributeName="transform" attributeType="XML" type="translate" values="0 0; 5 -1; 0 0; -3 1; 0 0" dur="2s" repeatCount="indefinite"></animateTransform>
+    
+    <!-- Car main body -->
+    <path d="M 200 350 L 250 350 L 280 320 L 400 320 L 430 340 L 600 340 L 620 360 L 620 420 L 200 420 Z" fill="#CC0000" stroke="#8B0000" stroke-width="2" data-index="0" style="opacity: 1;"></path>
+    
+    <!-- Car roof -->
+    <path d="M 290 320 L 320 280 L 480 280 L 520 320 Z" fill="#CC0000" stroke="#8B0000" stroke-width="2" data-index="1" style="opacity: 1;"></path>
+    
+    <!-- Windshield -->
+    <path d="M 295 315 L 325 285 L 390 285 L 400 315 Z" fill="#87CEEB" opacity="0.6" stroke="#333333" stroke-width="1.5" data-index="2"></path>
+    
+    <!-- Driver side window (closed) -->
+    <path d="M 410 315 L 440 290 L 510 290 L 515 315 L 410 315 Z" fill="#87CEEB" opacity="0.6" stroke="#333333" stroke-width="1.5" data-index="3" style="opacity: 1;"></path>
+    
+    <!-- Rear window -->
+    <path d="M 530 315 L 560 295 L 595 315 L 595 335 L 530 335 Z" fill="#87CEEB" opacity="0.6" stroke="#333333" stroke-width="1.5" data-index="4"></path>
+    
+    <!-- Car bottom trim -->
+    <rect x="200" y="420" width="420" height="8" fill="#8B0000"></rect>
+    
+    <!-- Door line -->
+    <line x1="410" y1="340" x2="410" y2="420" stroke="#8B0000" stroke-width="2"></line>
+    <line x1="530" y1="335" x2="530" y2="420" stroke="#8B0000" stroke-width="2"></line>
+    
+    <!-- Door handles -->
+    <ellipse cx="370" cy="380" rx="8" ry="4" fill="#333333"></ellipse>
+    <ellipse cx="490" cy="380" rx="8" ry="4" fill="#333333"></ellipse>
+    
+    <!-- Side mirror -->
+    <ellipse cx="280" cy="335" rx="15" ry="10" fill="#CC0000" stroke="#8B0000" stroke-width="1.5"></ellipse>
+    <path d="M 280 335 L 295 340" stroke="#8B0000" stroke-width="2" data-index="5"></path>
+    
+    <!-- Headlights -->
+    <ellipse cx="615" cy="370" rx="12" ry="18" fill="#F5F5DC" stroke="#333333" stroke-width="1.5"></ellipse>
+    
+    <!-- Taillights -->
+    <rect x="195" y="365" width="8" height="25" fill="#FFD700" stroke="#CC8800" stroke-width="1"></rect>
+    
+    <!-- Hood logo (BMW style) -->
+    <circle cx="580" cy="350" r="10" fill="#8B0000" stroke="#333333" stroke-width="1.5"></circle>
+    <circle cx="580" cy="350" r="7" fill="none" stroke="#666666" stroke-width="1"></circle>
+    
+    <!-- Car body highlights/reflections -->
+    <ellipse cx="450" cy="360" rx="80" ry="15" fill="#FFFFFF" opacity="0.15"></ellipse>
+    <ellipse cx="350" cy="370" rx="60" ry="12" fill="#FFFFFF" opacity="0.1"></ellipse>
+    
+    <!-- Window frame -->
+    <path d="M 410 315 L 410 340" stroke="#333333" stroke-width="2" data-index="6"></path>
+    <path d="M 515 315 L 515 340" stroke="#333333" stroke-width="2" data-index="7"></path>
+  </g>
+  
+  <!-- Driver (inside the car, visible through window) -->
+  <g id="driver-group">
+    <animateTransform attributeName="transform" attributeType="XML" type="translate" values="0 0; 1 -0.5; 0 0; -0.5 0.5; 0 0" dur="3s" repeatCount="indefinite"></animateTransform>
+    
+    <!-- Driver's body (partially visible) -->
+    <path d="M 420 340 L 420 370 L 470 370 L 470 340 Z" fill="#000000" data-index="8" style="opacity: 1;"></path>
+    
+    <!-- Driver's shoulder -->
+    <ellipse cx="445" cy="340" rx="20" ry="8" fill="#000000"></ellipse>
+    
+    <!-- Driver's neck -->
+    <rect x="440" y="325" width="15" height="15" fill="#F5CBA7"></rect>
+    
+    <!-- Driver's head -->
+    <ellipse cx="447" cy="310" rx="18" ry="23" fill="#F5CBA7"></ellipse>
+    
+    <!-- Driver's hair -->
+    <ellipse cx="447" cy="300" rx="19" ry="16" fill="#2C1810"></ellipse>
+    <path d="M 430 305 Q 447 295 464 305" fill="#2C1810" data-index="9"></path>
+    
+    <!-- Driver's ear -->
+    <ellipse cx="463" cy="310" rx="4" ry="6" fill="#E5B597"></ellipse>
+    
+    <!-- Driver's eye -->
+    <ellipse cx="455" cy="307" rx="3" ry="4" fill="#000000"></ellipse>
+    <circle cx="456" cy="306" r="1" fill="#FFFFFF"></circle>
+    
+    <!-- Driver's eyebrow -->
+    <path d="M 450 302 Q 455 301 460 302" stroke="#2C1810" stroke-width="1.5" fill="none" data-index="10"></path>
+    
+    <!-- Driver's nose -->
+    <path d="M 460 310 L 462 315" stroke="#D4A574" stroke-width="1.5" fill="none" data-index="11"></path>
+    
+    <!-- Driver's smiling mouth -->
+    <path d="M 453 318 Q 457 321 461 318" stroke="#000000" stroke-width="1.5" fill="none" stroke-linecap="round" data-index="12"></path>
+    
+    <!-- Driver's hand on steering wheel (partial) -->
+    <ellipse cx="475" cy="355" rx="8" ry="6" fill="#F5CBA7"></ellipse>
+    
+    <!-- Steering wheel (partial, visible through window) -->
+    <path d="M 470 350 Q 485 350 490 360" stroke="#333333" stroke-width="4" fill="none" data-index="13"></path>
+    <circle cx="480" cy="358" r="3" fill="#666666"></circle>
+  </g>
+  
+  <!-- Front tire -->
+  <g id="front-tire" transform="translate(550, 420)">
+    <animateTransform attributeName="transform" attributeType="XML" type="rotate" from="0 550 420" to="360 550 420" dur="0.8s" repeatCount="indefinite"></animateTransform>
+    
+    <circle cx="550" cy="420" r="35" fill="#1C1C1C" stroke="#000000" stroke-width="2"></circle>
+    <circle cx="550" cy="420" r="25" fill="#333333"></circle>
+    <circle cx="550" cy="420" r="12" fill="#666666"></circle>
+    
+    <!-- Rim spokes -->
+    <line x1="550" y1="395" x2="550" y2="445" stroke="#888888" stroke-width="2"></line>
+    <line x1="525" y1="420" x2="575" y2="420" stroke="#888888" stroke-width="2"></line>
+    <line x1="532" y1="402" x2="568" y2="438" stroke="#888888" stroke-width="2"></line>
+    <line x1="532" y1="438" x2="568" y2="402" stroke="#888888" stroke-width="2"></line>
+  </g>
+  
+  <!-- Rear tire -->
+  <g id="rear-tire" transform="translate(270, 420)">
+    <animateTransform attributeName="transform" attributeType="XML" type="rotate" from="0 270 420" to="360 270 420" dur="0.8s" repeatCount="indefinite"></animateTransform>
+    
+    <circle cx="270" cy="420" r="35" fill="#1C1C1C" stroke="#000000" stroke-width="2"></circle>
+    <circle cx="270" cy="420" r="25" fill="#333333"></circle>
+    <circle cx="270" cy="420" r="12" fill="#666666"></circle>
+    
+    <!-- Rim spokes -->
+    <line x1="270" y1="395" x2="270" y2="445" stroke="#888888" stroke-width="2"></line>
+    <line x1="245" y1="420" x2="295" y2="420" stroke="#888888" stroke-width="2"></line>
+    <line x1="252" y1="402" x2="288" y2="438" stroke="#888888" stroke-width="2"></line>
+    <line x1="252" y1="438" x2="288" y2="402" stroke="#888888" stroke-width="2"></line>
+  </g>
+  
+  <!-- Motion lines behind car -->
+  <g opacity="0.3">
+    <line x1="150" y1="380" x2="180" y2="380" stroke="#666666" stroke-width="2" stroke-linecap="round"></line>
+    <line x1="140" y1="395" x2="175" y2="395" stroke="#666666" stroke-width="2" stroke-linecap="round"></line>
+    <line x1="155" y1="410" x2="185" y2="410" stroke="#666666" stroke-width="1.5" stroke-linecap="round"></line>
+    
+    <animate attributeName="opacity" values="0.3;0.6;0.3" dur="1.5s" repeatCount="indefinite"></animate>
+  </g>
+</svg>
