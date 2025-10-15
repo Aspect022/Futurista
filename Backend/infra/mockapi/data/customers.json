@@ -1,0 +1,52 @@
+{
+  "CUST001": {
+    "customer_id": "CUST001",
+    "name": "Rajesh Kumar",
+    "phone": "+91-9876543210",
+    "email": "rajesh.kumar@email.com",
+    "address": {
+      "street": "123 MG Road",
+      "city": "Bangalore",
+      "state": "Karnataka",
+      "pincode": "560001"
+    },
+    "preferences": {
+      "communication_method": "voice",
+      "service_reminders": true,
+      "language": "Hindi",
+      "preferred_time": "morning"
+    },
+    "vehicles": ["VIN123ABC"],
+    "service_history": {
+      "total_services": 5,
+      "last_service_date": "2024-01-15",
+      "satisfaction_score": 4.2,
+      "loyalty_tier": "Gold"
+    }
+  },
+  "CUST002": {
+    "customer_id": "CUST002",
+    "name": "Priya Sharma",
+    "phone": "+91-9876543211",
+    "email": "priya.sharma@email.com",
+    "address": {
+      "street": "456 Park Street",
+      "city": "Mumbai",
+      "state": "Maharashtra",
+      "pincode": "400001"
+    },
+    "preferences": {
+      "communication_method": "app",
+      "service_reminders": true,
+      "language": "English",
+      "preferred_time": "evening"
+    },
+    "vehicles": ["VIN456DEF"],
+    "service_history": {
+      "total_services": 3,
+      "last_service_date": "2024-02-01",
+      "satisfaction_score": 4.5,
+      "loyalty_tier": "Silver"
+    }
+  }
+}

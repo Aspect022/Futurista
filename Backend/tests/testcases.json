@@ -1,0 +1,309 @@
+{
+  "automotive_test_suite": {
+    "name": "Automotive Predictive Maintenance System Test Suite",
+    "version": "1.0.0",
+    "description": "Comprehensive test cases for all system components including normal operations, edge cases, and UEBA monitoring",
+    "test_cases": [
+      {
+        "test_id": "TC001",
+        "name": "Normal Predictive Maintenance Analysis",
+        "description": "Test normal predictive maintenance workflow for a healthy vehicle",
+        "category": "normal_operations",
+        "input": {
+          "endpoint": "/maintenance/analyze",
+          "payload": {
+            "vin": "VIN123ABC",
+            "customer_id": "CUST001",
+            "priority": "MEDIUM",
+            "analysis_type": "predictive"
+          }
+        },
+        "expected_output": {
+          "status": "completed",
+          "overall_confidence": 0.7,
+          "processing_time_seconds": 30.0
+        },
+        "validation_rules": [
+          "Response status should be 200",
+          "Overall confidence should be > 0.5",
+          "Processing time should be < 60 seconds",
+          "Should contain results from all worker agents"
+        ]
+      },
+      {
+        "test_id": "TC002",
+        "name": "Emergency Response Workflow",
+        "description": "Test emergency response workflow for critical vehicle issues",
+        "category": "emergency_operations",
+        "input": {
+          "endpoint": "/emergency/alert",
+          "payload": {
+            "vin": "VIN456DEF",
+            "alert_type": "engine_failure",
+            "severity": "CRITICAL",
+            "customer_id": "CUST002"
+          }
+        },
+        "expected_output": {
+          "status": "completed",
+          "overall_confidence": 0.8,
+          "processing_time_seconds": 15.0
+        },
+        "validation_rules": [
+          "Response status should be 200",
+          "Processing time should be < 30 seconds for emergency",
+          "Should contain emergency-specific recommendations",
+          "UEBA monitoring should be active"
+        ]
+      },
+      {
+        "test_id": "TC003",
+        "name": "High Priority Maintenance Analysis",
+        "description": "Test high priority maintenance analysis workflow",
+        "category": "normal_operations",
+        "input": {
+          "endpoint": "/maintenance/analyze",
+          "payload": {
+            "vin": "VIN123ABC",
+            "customer_id": "CUST001",
+            "priority": "HIGH",
+            "analysis_type": "predictive"
+          }
+        },
+        "expected_output": {
+          "status": "completed",
+          "overall_confidence": 0.7,
+          "processing_time_seconds": 25.0
+        },
+        "validation_rules": [
+          "Response status should be 200",
+          "Should prioritize high-priority processing",
+          "Customer engagement should be more aggressive",
+          "Scheduling should offer earlier appointments"
+        ]
+      },
+      {
+        "test_id": "TC004",
+        "name": "Vehicle with Multiple DTC Codes",
+        "description": "Test analysis of vehicle with multiple diagnostic trouble codes",
+        "category": "edge_cases",
+        "input": {
+          "endpoint": "/maintenance/analyze",
+          "payload": {
+            "vin": "VIN456DEF",
+            "customer_id": "CUST002",
+            "priority": "MEDIUM",
+            "analysis_type": "predictive"
+          }
+        },
+        "expected_output": {
+          "status": "completed",
+          "overall_confidence": 0.8,
+          "processing_time_seconds": 30.0
+        },
+        "validation_rules": [
+          "Response status should be 200",
+          "Diagnosis worker should identify multiple issues",
+          "Manufacturing insights should be generated",
+          "Risk assessment should be elevated"
+        ]
+      },
+      {
+        "test_id": "TC005",
+        "name": "Customer with Voice Communication Preference",
+        "description": "Test customer engagement with voice communication preference",
+        "category": "normal_operations",
+        "input": {
+          "endpoint": "/maintenance/analyze",
+          "payload": {
+            "vin": "VIN123ABC",
+            "customer_id": "CUST001",
+            "priority": "MEDIUM",
+            "analysis_type": "predictive"
+          }
+        },
+        "expected_output": {
+          "status": "completed",
+          "overall_confidence": 0.7,
+          "processing_time_seconds": 30.0
+        },
+        "validation_rules": [
+          "Response status should be 200",
+          "Customer engagement should use voice channel",
+          "Voice script should be in Hindi",
+          "Engagement strategy should be personalized"
+        ]
+      },
+      {
+        "test_id": "TC006",
+        "name": "Fleet Vehicle Analysis",
+        "description": "Test analysis of fleet vehicle with extensive maintenance history",
+        "category": "normal_operations",
+        "input": {
+          "endpoint": "/maintenance/analyze",
+          "payload": {
+            "vin": "VIN456DEF",
+            "customer_id": "CUST002",
+            "priority": "LOW",
+            "analysis_type": "routine"
+          }
+        },
+        "expected_output": {
+          "status": "completed",
+          "overall_confidence": 0.6,
+          "processing_time_seconds": 35.0
+        },
+        "validation_rules": [
+          "Response status should be 200",
+          "Manufacturing insights should be comprehensive",
+          "Feedback worker should analyze service history",
+          "Predictive analytics should consider maintenance patterns"
+        ]
+      },
+      {
+        "test_id": "TC007",
+        "name": "UEBA Security Monitoring Test",
+        "description": "Test UEBA security monitoring during normal operations",
+        "category": "security",
+        "input": {
+          "endpoint": "/maintenance/analyze",
+          "payload": {
+            "vin": "VIN123ABC",
+            "customer_id": "CUST001",
+            "priority": "MEDIUM",
+            "analysis_type": "predictive"
+          }
+        },
+        "expected_output": {
+          "status": "completed",
+          "overall_confidence": 0.7,
+          "processing_time_seconds": 30.0
+        },
+        "validation_rules": [
+          "Response status should be 200",
+          "UEBA events should be recorded",
+          "Risk scores should be within normal range",
+          "No security blocks should occur"
+        ]
+      },
+      {
+        "test_id": "TC008",
+        "name": "Invalid VIN Handling",
+        "description": "Test system behavior with invalid VIN",
+        "category": "error_handling",
+        "input": {
+          "endpoint": "/maintenance/analyze",
+          "payload": {
+            "vin": "INVALID_VIN",
+            "customer_id": "CUST001",
+            "priority": "MEDIUM",
+            "analysis_type": "predictive"
+          }
+        },
+        "expected_output": {
+          "status": "error",
+          "overall_confidence": 0.0,
+          "processing_time_seconds": 10.0
+        },
+        "validation_rules": [
+          "Response status should be 200 or 404",
+          "Error should be handled gracefully",
+          "System should not crash",
+          "Error message should be informative"
+        ]
+      },
+      {
+        "test_id": "TC009",
+        "name": "Missing Customer ID Handling",
+        "description": "Test system behavior with missing customer ID",
+        "category": "error_handling",
+        "input": {
+          "endpoint": "/maintenance/analyze",
+          "payload": {
+            "vin": "VIN123ABC",
+            "priority": "MEDIUM",
+            "analysis_type": "predictive"
+          }
+        },
+        "expected_output": {
+          "status": "completed",
+          "overall_confidence": 0.6,
+          "processing_time_seconds": 30.0
+        },
+        "validation_rules": [
+          "Response status should be 200",
+          "System should use default customer profile",
+          "Customer engagement should still work",
+          "Analysis should complete successfully"
+        ]
+      },
+      {
+        "test_id": "TC010",
+        "name": "Concurrent Request Handling",
+        "description": "Test system behavior with multiple concurrent requests",
+        "category": "performance",
+        "input": {
+          "endpoint": "/maintenance/analyze",
+          "payload": {
+            "vin": "VIN123ABC",
+            "customer_id": "CUST001",
+            "priority": "MEDIUM",
+            "analysis_type": "predictive"
+          }
+        },
+        "expected_output": {
+          "status": "completed",
+          "overall_confidence": 0.7,
+          "processing_time_seconds": 35.0
+        },
+        "validation_rules": [
+          "Response status should be 200",
+          "All requests should be processed",
+          "No data corruption should occur",
+          "Session management should work correctly"
+        ]
+      }
+    ],
+    "test_categories": {
+      "normal_operations": {
+        "description": "Tests for normal system operations and workflows",
+        "expected_success_rate": 0.95
+      },
+      "emergency_operations": {
+        "description": "Tests for emergency response scenarios",
+        "expected_success_rate": 0.90
+      },
+      "edge_cases": {
+        "description": "Tests for edge cases and unusual scenarios",
+        "expected_success_rate": 0.85
+      },
+      "error_handling": {
+        "description": "Tests for error handling and graceful degradation",
+        "expected_success_rate": 0.80
+      },
+      "security": {
+        "description": "Tests for security monitoring and UEBA functionality",
+        "expected_success_rate": 0.90
+      },
+      "performance": {
+        "description": "Tests for system performance and scalability",
+        "expected_success_rate": 0.85
+      }
+    },
+    "performance_benchmarks": {
+      "normal_analysis_time": 30.0,
+      "emergency_response_time": 15.0,
+      "max_concurrent_requests": 10,
+      "min_confidence_threshold": 0.5,
+      "max_memory_usage_mb": 512,
+      "max_cpu_usage_percent": 80
+    },
+    "success_criteria": {
+      "overall_success_rate": 0.90,
+      "critical_path_success_rate": 0.95,
+      "emergency_response_success_rate": 0.90,
+      "security_monitoring_success_rate": 0.90,
+      "error_handling_success_rate": 0.80
+    }
+  }
+}

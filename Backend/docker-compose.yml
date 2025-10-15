@@ -1,0 +1,245 @@
+version: '3.8'
+
+services:
+  # Mock API Server - Simulates automotive data sources
+  mockapi:
+    build:
+      context: .
+      dockerfile: dockerfile-mockapi
+    container_name: automotive-mockapi
+    ports:
+      - "8000:8000"
+    environment:
+      - FLASK_ENV=production
+      - LOG_LEVEL=INFO
+    volumes:
+      - ./infra/mockapi/data:/app/data:ro
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    networks:
+      - automotive-network
+
+  # Master Agent - Central orchestrator
+  master-agent:
+    build:
+      context: .
+      dockerfile: dockerfile-master
+    container_name: automotive-master-agent
+    ports:
+      - "8001:8001"
+    environment:
+      - FASTAPI_ENV=production
+      - LOG_LEVEL=INFO
+      - MOCK_API_URL=http://mockapi:8000
+      - UEBA_THRESHOLD=0.7
+    depends_on:
+      mockapi:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8001/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s
+    networks:
+      - automotive-network
+
+  # Data Analysis Worker
+  data-analysis-worker:
+    build:
+      context: .
+      dockerfile: dockerfile-worker
+    container_name: automotive-data-analysis
+    ports:
+      - "8002:8002"
+    environment:
+      - WORKER_TYPE=data_analysis
+      - MOCK_API_URL=http://mockapi:8000
+      - LOG_LEVEL=INFO
+    depends_on:
+      mockapi:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8002/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    networks:
+      - automotive-network
+
+  # Diagnosis Worker
+  diagnosis-worker:
+    build:
+      context: .
+      dockerfile: dockerfile-worker
+    container_name: automotive-diagnosis
+    ports:
+      - "8003:8003"
+    environment:
+      - WORKER_TYPE=diagnosis
+      - MOCK_API_URL=http://mockapi:8000
+      - LOG_LEVEL=INFO
+    depends_on:
+      mockapi:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8003/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    networks:
+      - automotive-network
+
+  # Customer Engagement Worker
+  customer-engagement-worker:
+    build:
+      context: .
+      dockerfile: dockerfile-worker
+    container_name: automotive-customer-engagement
+    ports:
+      - "8004:8004"
+    environment:
+      - WORKER_TYPE=customer_engagement
+      - MOCK_API_URL=http://mockapi:8000
+      - LOG_LEVEL=INFO
+    depends_on:
+      mockapi:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8004/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    networks:
+      - automotive-network
+
+  # Scheduling Worker
+  scheduling-worker:
+    build:
+      context: .
+      dockerfile: dockerfile-worker
+    container_name: automotive-scheduling
+    ports:
+      - "8005:8005"
+    environment:
+      - WORKER_TYPE=scheduling
+      - MOCK_API_URL=http://mockapi:8000
+      - LOG_LEVEL=INFO
+    depends_on:
+      mockapi:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8005/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    networks:
+      - automotive-network
+
+  # Feedback Worker
+  feedback-worker:
+    build:
+      context: .
+      dockerfile: dockerfile-worker
+    container_name: automotive-feedback
+    ports:
+      - "8006:8006"
+    environment:
+      - WORKER_TYPE=feedback
+      - MOCK_API_URL=http://mockapi:8000
+      - LOG_LEVEL=INFO
+    depends_on:
+      mockapi:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8006/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    networks:
+      - automotive-network
+
+  # Manufacturing Insights Worker
+  manufacturing-insights-worker:
+    build:
+      context: .
+      dockerfile: dockerfile-worker
+    container_name: automotive-manufacturing-insights
+    ports:
+      - "8007:8007"
+    environment:
+      - WORKER_TYPE=manufacturing_insights
+      - MOCK_API_URL=http://mockapi:8000
+      - LOG_LEVEL=INFO
+    depends_on:
+      mockapi:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8007/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    networks:
+      - automotive-network
+
+  # Streamlit Dashboard
+  dashboard:
+    build:
+      context: .
+      dockerfile: dockerfile-streamlit
+    container_name: automotive-dashboard
+    ports:
+      - "8501:8501"
+    environment:
+      - MASTER_AGENT_URL=http://master-agent:8001
+      - LOG_LEVEL=INFO
+    depends_on:
+      master-agent:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8501/_stcore/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+    networks:
+      - automotive-network
+
+  # Redis for session storage and caching
+  redis:
+    image: redis:7-alpine
+    container_name: automotive-redis
+    ports:
+      - "6379:6379"
+    command: redis-server --appendonly yes
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    networks:
+      - automotive-network
+
+volumes:
+  redis-data:
+    driver: local
+
+networks:
+  automotive-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16

@@ -1,0 +1,53 @@
+# Multi-stage Dockerfile for Worker Agents
+FROM python:3.10-slim as builder
+
+# Install build dependencies
+RUN apt-get update && apt-get install -y \
+    gcc \
+    g++ \
+    && rm -rf /var/lib/apt/lists/*
+
+# Create virtual environment
+RUN python -m venv /opt/venv
+ENV PATH="/opt/venv/bin:$PATH"
+
+# Copy and install requirements
+COPY requirements-worker.txt requirements.txt
+RUN pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir -r requirements.txt
+
+# Production stage
+FROM python:3.10-slim as production
+
+# Install runtime dependencies
+RUN apt-get update && apt-get install -y \
+    curl \
+    && rm -rf /var/lib/apt/lists/* \
+    && apt-get clean
+
+# Copy virtual environment from builder stage
+COPY --from=builder /opt/venv /opt/venv
+ENV PATH="/opt/venv/bin:$PATH"
+
+# Create non-root user
+RUN groupadd -r appuser && useradd -r -g appuser appuser
+
+# Set working directory
+WORKDIR /app
+
+# Copy application code (will be overridden by specific worker)
+COPY workers/data_analysis/ .
+
+# Change ownership to non-root user
+RUN chown -R appuser:appuser /app
+USER appuser
+
+# Expose port (will be overridden by each worker)
+EXPOSE 8002
+
+# Health check with proper timeout and retries
+HEALTHCHECK --interval=30s --timeout=15s --start-period=30s --retries=5 \
+    CMD curl -f http://localhost:8002/health || exit 1
+
+# Run the application with proper configuration
+CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8002", "--workers", "1", "--log-level", "info"]

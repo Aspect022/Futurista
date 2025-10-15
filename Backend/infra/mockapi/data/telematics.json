@@ -1,0 +1,83 @@
+{
+  "VIN123ABC": {
+    "vehicle_info": {
+      "vin": "VIN123ABC",
+      "make": "Hero",
+      "model": "Splendor",
+      "year": 2023,
+      "engine_type": "4-stroke",
+      "mileage": 15420
+    },
+    "current_status": {
+      "engine_rpm": 1200,
+      "speed": 0,
+      "fuel_level": 75,
+      "battery_voltage": 12.4,
+      "engine_temp": 85,
+      "oil_pressure": 45,
+      "last_updated": "2024-03-10T10:30:00"
+    },
+    "sensor_data": {
+      "ignition_coil_resistance": 2.1,
+      "spark_plug_gap": 0.8,
+      "air_filter_condition": 0.7,
+      "brake_pad_thickness": 8.5,
+      "tire_pressure": [32, 31, 33, 32],
+      "transmission_fluid_level": 0.8
+    },
+    "dtc_codes": ["P0301", "P0171"],
+    "maintenance_history": [
+      {
+        "date": "2024-01-15",
+        "service_type": "Oil Change",
+        "mileage": 12000,
+        "cost": 800,
+        "center": "Hero Service Center Bangalore"
+      },
+      {
+        "date": "2023-12-01",
+        "service_type": "General Checkup",
+        "mileage": 10000,
+        "cost": 1200,
+        "center": "Hero Service Center Bangalore"
+      }
+    ]
+  },
+  "VIN456DEF": {
+    "vehicle_info": {
+      "vin": "VIN456DEF",
+      "make": "Mahindra",
+      "model": "XUV300",
+      "year": 2022,
+      "engine_type": "Diesel",
+      "mileage": 28500
+    },
+    "current_status": {
+      "engine_rpm": 0,
+      "speed": 0,
+      "fuel_level": 20,
+      "battery_voltage": 11.8,
+      "engine_temp": 0,
+      "oil_pressure": 0,
+      "last_updated": "2024-03-10T10:30:00"
+    },
+    "sensor_data": {
+      "ignition_coil_resistance": 1.8,
+      "spark_plug_gap": 0.9,
+      "air_filter_condition": 0.4,
+      "brake_pad_thickness": 6.2,
+      "tire_pressure": [30, 29, 31, 30],
+      "transmission_fluid_level": 0.6
+    },
+    "dtc_codes": ["P0420", "P0700"],
+    "maintenance_history": [
+      {
+        "date": "2024-02-01",
+        "service_type": "Transmission Service",
+        "mileage": 25000,
+        "cost": 3500,
+        "center": "Mahindra Service Center Mumbai"
+      }
+    ]
+  }
+}

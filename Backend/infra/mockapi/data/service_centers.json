@@ -1,0 +1,38 @@
+{
+  "centers": [
+    {
+      "id": "SC001",
+      "name": "Hero Service Center Bangalore",
+      "location": "Bangalore, Karnataka",
+      "address": "123 Service Road, Bangalore",
+      "phone": "+91-80-12345678",
+      "capacity": 50,
+      "specializations": ["Engine", "Transmission", "Electrical"],
+      "availability": [
+        "2024-03-10T09:00:00",
+        "2024-03-10T14:00:00",
+        "2024-03-11T10:00:00",
+        "2024-03-11T15:00:00"
+      ],
+      "ratings": 4.3,
+      "services_offered": ["General Maintenance", "Emergency Repair", "Warranty Service"]
+    },
+    {
+      "id": "SC002",
+      "name": "Mahindra Service Center Mumbai",
+      "location": "Mumbai, Maharashtra",
+      "address": "456 Auto Street, Mumbai",
+      "phone": "+91-22-87654321",
+      "capacity": 75,
+      "specializations": ["Diesel Engine", "Transmission", "Suspension"],
+      "availability": [
+        "2024-03-10T08:00:00",
+        "2024-03-10T13:00:00",
+        "2024-03-11T09:00:00",
+        "2024-03-11T16:00:00"
+      ],
+      "ratings": 4.1,
+      "services_offered": ["General Maintenance", "Emergency Repair", "Warranty Service", "Fleet Service"]
+    }
+  ]
+}
