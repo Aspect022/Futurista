@@ -54,116 +54,51 @@ export function LandingHero() {
       aria-labelledby="hero-title"
       role="region"
     >
-      {/* Sky background */}
-      <div className="absolute inset-0" aria-hidden="true">
-        <div className="h-full w-full bg-[linear-gradient(180deg,#60A5FA_0%,#93C5FD_35%,#93C5FD_65%,#FFFFFF_100%)]" />
-      </div>
-
-      {/* Clouds layer (subtle, decorative) */}
-      <div
-        className="pointer-events-none absolute inset-0 z-[1]"
-        aria-hidden="true"
-      >
-        <Cloud className="top-14 left-6" delay={0.2} scale={0.9} />
-        <Cloud className="top-20 right-16" delay={0.8} scale={0.8} />
-        <Cloud className="left-[62%] top-[28vh]" delay={0.5} scale={1} />
-      </div>
-
-      {/* Headline - centered and cleaner */}
-      <div className="relative z-10 max-w-7xl mx-auto px-4 md:px-6 pt-12 md:pt-16 grid place-items-center">
-        <motion.h1
-          id="hero-title"
-          initial={prefersReducedMotion ? false : { y: 16, opacity: 0 }}
-          animate={prefersReducedMotion ? {} : { y: 0, opacity: 1 }}
-          transition={{ duration: 0.6, ease: "easeOut" }}
-          className="text-center text-balance text-white text-5xl md:text-7xl font-semibold tracking-tight leading-[1.1] drop-shadow-[0_2px_6px_rgba(0,0,0,0.25)] md:drop-shadow-[0_3px_10px_rgba(0,0,0,0.35)]"
+      {/* Video background */}
+      <div className="absolute inset-0 z-0">
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="h-full w-full object-cover"
         >
-          Breakdown <span aria-hidden="true">→</span> Breakthrough
-        </motion.h1>
+          <source src="/Generated/Videos/Hero-Background.mp4" type="video/mp4" />
+        </video>
+        {/* Overlay for text readability */}
+        <div className="absolute inset-0 bg-black/40" />
       </div>
 
-      {/* Road */}
-      <div className="absolute inset-x-0 bottom-0 z-0">
-        {/* Horizon line */}
-        <div className="h-[1px] w-full bg-black/70" />
-        <div className="relative h-[35vh] bg-black">
-          {/* Lane markers */}
-          <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 flex items-center justify-around px-6 md:px-20">
-            <span
-              className="h-1 w-16 md:w-24 rounded-full bg-white"
-              aria-hidden="true"
-            />
-            <span
-              className="h-1 w-16 md:w-24 rounded-full bg-white"
-              aria-hidden="true"
-            />
-            <span
-              className="h-1 w-16 md:w-24 rounded-full bg-white"
-              aria-hidden="true"
-            />
-          </div>
+      {/* Main Content */}
+      <div className="relative z-10 flex min-h-[100svh] flex-col justify-center px-4 md:px-6">
+        <div className="mx-auto max-w-7xl text-center">
+          <motion.h1
+            id="hero-title"
+            initial={prefersReducedMotion ? false : { y: 20, opacity: 0 }}
+            animate={prefersReducedMotion ? {} : { y: 0, opacity: 1 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+            className="text-balance text-5xl font-bold tracking-tight text-white drop-shadow-lg md:text-7xl lg:text-8xl"
+          >
+            Breakdown <span className="text-primary-foreground/90">→</span>{" "}
+            <span className="bg-gradient-to-r from-blue-200 to-white bg-clip-text text-transparent">
+              Breakthrough
+            </span>
+          </motion.h1>
 
-          {/* Place cars inside the road container so they sit on the road */}
-          <div className="absolute inset-0 z-[2]">
-            {/* Left: breakdown car higher on road and larger */}
-            <div className="absolute left-[6%] md:left-[10%] -top-8 flex items-end gap-4">
-              <div
-                aria-label="Driver standing by car with hood open"
-                className="h-14 w-2 rounded-full bg-white/95"
-              />
-              <Image
-                src="/images/car-broken.svg"
-                alt="Car with hood open — breakdown"
-                width={300}
-                height={150}
-                priority
-                className="drop-shadow-[0_0_0_2px_#000000]"
-              />
-            </div>
-
-            {/* Right: car driving away — larger and slightly higher */}
-            <div className="absolute right-[8%] md:right-[12%] top-2">
-              <Image
-                src="/images/car-good.svg"
-                alt="Car driving away — breakthrough"
-                width={280}
-                height={140}
-                priority
-                className="drop-shadow-[0_0_0_2px_#000000]"
-              />
-            </div>
-          </div>
+          <motion.p
+            initial={prefersReducedMotion ? false : { y: 20, opacity: 0 }}
+            animate={prefersReducedMotion ? {} : { y: 0, opacity: 1 }}
+            transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
+            className="mt-6 text-lg text-gray-200 md:text-xl max-w-2xl mx-auto"
+          >
+            Experience the future of fleet management with AI-driven predictive
+            maintenance that keeps your vehicles on the road.
+          </motion.p>
         </div>
-
-        {/* Enhanced landscape elements: trees and bushes */}
-        {/* Left side trees */}
-        <div className="absolute left-0 top-[-140px] w-16 h-32">
-          <div className="absolute bottom-0 left-6 w-3 h-16 bg-amber-900 rounded-full"></div>
-          <div className="absolute bottom-16 left-0 w-16 h-16 bg-green-700 rounded-full"></div>
-        </div>
-        <div className="absolute left-[8%] top-[-160px] w-16 h-36">
-          <div className="absolute bottom-0 left-8 w-4 h-20 bg-amber-900 rounded-full"></div>
-          <div className="absolute bottom-20 left-2 w-16 h-16 bg-green-700 rounded-full"></div>
-        </div>
-        
-        {/* Right side trees */}
-        <div className="absolute right-[15%] top-[-150px] w-16 h-36">
-          <div className="absolute bottom-0 left-8 w-4 h-18 bg-amber-900 rounded-full"></div>
-          <div className="absolute bottom-18 left-2 w-16 h-16 bg-green-700 rounded-full"></div>
-        </div>
-        <div className="absolute right-4 top-[-120px] w-16 h-32">
-          <div className="absolute bottom-0 left-6 w-3 h-14 bg-amber-900 rounded-full"></div>
-          <div className="absolute bottom-14 left-0 w-16 h-16 bg-green-700 rounded-full"></div>
-        </div>
-        
-        {/* Bushes */}
-        <div className="absolute left-[5%] top-[-80px] w-8 h-8 bg-green-600 rounded-full"></div>
-        <div className="absolute right-[25%] top-[-70px] w-10 h-8 bg-green-600 rounded-full"></div>
-        <div className="absolute right-[5%] top-[-90px] w-8 h-8 bg-green-600 rounded-full"></div>
       </div>
 
-      {/* Spacer to ensure content clears the absolute road area on small screens */}
-      <div className="h-[35vh]" aria-hidden="true" />
+      {/* Decorative bottom fade */}
+      <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-background to-transparent z-10" />
     </section>
   );
 }

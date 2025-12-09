@@ -119,7 +119,7 @@ export default function AppointmentBookingPage() {
             </h2>
 
             <div className="space-y-4">
-              <div className="p-4 border border-input rounded-lg hover:bg-accent transition-colors">
+              <div className="p-4 border border-input rounded-lg hover:bg-accent transition-all card-hover cursor-pointer">
                 <h3 className="font-medium text-foreground">Downtown Service Center</h3>
                 <p className="text-sm text-muted-foreground">120 Market St.</p>
                 <div className="mt-2 flex items-center gap-4 text-sm">
@@ -128,7 +128,7 @@ export default function AppointmentBookingPage() {
                 </div>
               </div>
 
-              <div className="p-4 border border-input rounded-lg hover:bg-accent transition-colors">
+              <div className="p-4 border border-input rounded-lg hover:bg-accent transition-all card-hover cursor-pointer">
                 <h3 className="font-medium text-foreground">Northside Maintenance Hub</h3>
                 <p className="text-sm text-muted-foreground">431 Woodland Ave.</p>
                 <div className="mt-2 flex items-center gap-4 text-sm">
@@ -137,7 +137,7 @@ export default function AppointmentBookingPage() {
                 </div>
               </div>
 
-              <div className="p-4 border border-input rounded-lg hover:bg-accent transition-colors">
+              <div className="p-4 border border-input rounded-lg hover:bg-accent transition-all card-hover cursor-pointer">
                 <h3 className="font-medium text-foreground">Express Care Center</h3>
                 <p className="text-sm text-muted-foreground">780 Highway 101</p>
                 <div className="mt-2 flex items-center gap-4 text-sm">
@@ -145,6 +145,15 @@ export default function AppointmentBookingPage() {
                   <span className="text-foreground">18 min away</span>
                 </div>
               </div>
+            </div>
+
+            {/* Service Center Map */}
+            <div className="mt-6 rounded-lg overflow-hidden border border-input">
+              <img
+                src="/Generated/Images/Service-Center-Map.png"
+                alt="Service Centers Map"
+                className="w-full h-48 object-cover opacity-90 hover:opacity-100 transition-opacity"
+              />
             </div>
           </div>
 

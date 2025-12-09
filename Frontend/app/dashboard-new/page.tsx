@@ -16,8 +16,12 @@ import {
   Gauge,
   AlertTriangle,
   CheckCircle,
-  Clock
+  Clock,
+  Building2
 } from "lucide-react";
+import Image from "next/image";
+import { ServiceCenterMap } from "@/components/service-center-map";
+import { EmptyState } from "@/components/empty-state";
 
 export default function NewDashboardPage() {
   const router = useRouter();
@@ -50,21 +54,36 @@ export default function NewDashboardPage() {
   ];
 
   return (
-    <main className="min-h-dvh bg-background text-foreground">
+    <main className="min-h-dvh bg-background text-foreground relative">
+      {/* Subtle animated background */}
+      {/* Video Background */}
+      <div className="fixed inset-0 -z-10 overflow-hidden">
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="absolute inset-0 h-full w-full object-cover"
+        >
+          <source src="/Generated/Videos/Dashboard-Background.mp4" type="video/mp4" />
+        </video>
+        <div className="absolute inset-0 bg-background/80 backdrop-blur-sm" />
+      </div>
+
       <UnifiedNavbar includeFleetScore={true} fleetHealth={healthStats.overall} />
 
-      <div className="pt-16 min-h-dvh bg-background py-8 px-4">
+      <div className="pt-16 min-h-dvh bg-transparent py-8 px-4">
         <div className="max-w-7xl mx-auto">
           {/* Dashboard Header */}
           <header className="mb-8">
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
               <div>
                 <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-foreground">Fleet Dashboard</h1>
-                <p className="text-gray-600 mt-1 dark:text-gray-400">Manage your vehicles and predictive maintenance</p>
+                <p className="text-muted-foreground mt-1">Manage your vehicles and predictive maintenance</p>
               </div>
               <Button
                 onClick={() => router.push('/appointment-booking')}
-                className="bg-primary text-primary-foreground hover:bg-primary/90"
+                className="bg-primary text-primary-foreground hover:bg-primary/90 btn-scale shadow-lg shadow-primary/20"
               >
                 <Wrench className="h-4 w-4 mr-2" />
                 Schedule Service
@@ -87,13 +106,16 @@ export default function NewDashboardPage() {
               <TabsTrigger value="maintenance" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
                 Maintenance
               </TabsTrigger>
+              <TabsTrigger value="service-centers" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+                Service Centers
+              </TabsTrigger>
             </TabsList>
 
             {/* Overview Tab */}
             <TabsContent value="overview">
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
                 {/* Health Score Card */}
-                <Card className="lg:col-span-1">
+                <Card className="lg:col-span-1 bg-card/60 backdrop-blur-md border-primary/20 shadow-xl">
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2 text-foreground">
                       <Gauge className="h-5 w-5 text-blue-400" />
@@ -141,7 +163,7 @@ export default function NewDashboardPage() {
 
                 {/* Component Health Cards */}
                 <div className="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <Card>
+                  <Card className="bg-card/60 backdrop-blur-md border-primary/10 hover:bg-card/80 transition-all duration-300">
                     <CardHeader className="pb-2">
                       <CardTitle className="flex items-center gap-2 text-sm">
                         <Car className="h-4 w-4 text-blue-400" />
@@ -162,7 +184,7 @@ export default function NewDashboardPage() {
                     </CardContent>
                   </Card>
 
-                  <Card>
+                  <Card className="bg-card/60 backdrop-blur-md border-primary/10 hover:bg-card/80 transition-all duration-300">
                     <CardHeader className="pb-2">
                       <CardTitle className="flex items-center gap-2 text-sm">
                         <Battery className="h-4 w-4 text-blue-400" />
@@ -185,7 +207,7 @@ export default function NewDashboardPage() {
                     </CardContent>
                   </Card>
 
-                  <Card>
+                  <Card className="bg-card/60 backdrop-blur-md border-primary/10 hover:bg-card/80 transition-all duration-300">
                     <CardHeader className="pb-2">
                       <CardTitle className="flex items-center gap-2 text-sm">
                         <TrendingUp className="h-4 w-4 text-blue-400" />
@@ -206,7 +228,7 @@ export default function NewDashboardPage() {
                     </CardContent>
                   </Card>
 
-                  <Card>
+                  <Card className="bg-card/60 backdrop-blur-md border-primary/10 hover:bg-card/80 transition-all duration-300">
                     <CardHeader className="pb-2">
                       <CardTitle className="flex items-center gap-2 text-sm">
                         <AlertTriangle className="h-4 w-4 text-blue-400" />
@@ -470,7 +492,7 @@ export default function NewDashboardPage() {
                     </CardContent>
                   </Card>
 
-                  <Card>
+                  <Card className="bg-card/60 backdrop-blur-md border-primary/10 hover:bg-card/80 transition-all duration-300">
                     <CardHeader>
                       <CardTitle>Quick Actions</CardTitle>
                     </CardHeader>
@@ -508,14 +530,14 @@ export default function NewDashboardPage() {
                 </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                  <Card className="lg:col-span-2">
+                  <Card className="lg:col-span-2 bg-card/60 backdrop-blur-md border-primary/20 shadow-xl">
                     <CardHeader>
                       <CardTitle>Upcoming Services</CardTitle>
                     </CardHeader>
                     <CardContent>
                       <div className="space-y-4">
                         {upcomingMaintenance.map((task) => (
-                          <div key={task.id} className="flex items-center justify-between p-4 border border-input rounded-lg bg-card">
+                          <div key={task.id} className="flex items-center justify-between p-4 border border-input rounded-lg bg-card/50">
                             <div>
                               <h3 className="font-medium text-foreground">{task.task}</h3>
                               <p className="text-sm text-muted-foreground">Due in {task.dueIn} km</p>
@@ -537,25 +559,85 @@ export default function NewDashboardPage() {
                     </CardContent>
                   </Card>
 
-                  <Card>
+                  <div className="space-y-6">
+                    <Card className="bg-card/60 backdrop-blur-md border-primary/20 shadow-xl overflow-hidden">
+                      <CardHeader>
+                        <CardTitle>Quick Reference</CardTitle>
+                      </CardHeader>
+                      <CardContent className="p-0">
+                        <div className="relative w-full aspect-square">
+                          <Image
+                            src="/Generated/Images/Vehicle-Maintenance-Icons.png"
+                            alt="Maintenance Icons"
+                            fill
+                            className="object-cover"
+                          />
+                        </div>
+                      </CardContent>
+                    </Card>
+
+                    <Card className="bg-card/60 backdrop-blur-md border-primary/20 shadow-xl">
+                      <CardHeader>
+                        <CardTitle>Maintenance History</CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="space-y-4">
+                          <div className="p-3 bg-green-500/10 rounded-md border border-green-500/30">
+                            <p className="font-medium text-green-600 dark:text-green-400">Oil Change</p>
+                            <p className="text-sm text-green-600/80 dark:text-green-300">Completed on 2025-09-15</p>
+                          </div>
+                          <div className="p-3 bg-blue-500/10 rounded-md border border-blue-500/30">
+                            <p className="font-medium text-blue-600 dark:text-blue-400">Brake Inspection</p>
+                            <p className="text-sm text-blue-600/80 dark:text-blue-300">Scheduled for 2025-10-20</p>
+                          </div>
+                          <div className="p-3 bg-muted rounded-md border border-input">
+                            <p className="font-medium text-muted-foreground">Tire Rotation</p>
+                            <p className="text-sm text-muted-foreground">Last performed: 2025-07-10</p>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </div>
+                </div>
+              </div>
+            </TabsContent>
+
+            {/* Service Centers Tab */}
+            <TabsContent value="service-centers">
+              <div className="space-y-6">
+                <ServiceCenterMap />
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <Card className="bg-card/60 backdrop-blur-md border-primary/20 shadow-xl">
                     <CardHeader>
-                      <CardTitle>Maintenance History</CardTitle>
+                      <CardTitle>Preferred Centers</CardTitle>
                     </CardHeader>
                     <CardContent>
                       <div className="space-y-4">
-                        <div className="p-3 bg-green-500/10 rounded-md border border-green-500/30">
-                          <p className="font-medium text-green-600 dark:text-green-400">Oil Change</p>
-                          <p className="text-sm text-green-600/80 dark:text-green-300">Completed on 2025-09-15</p>
-                        </div>
-                        <div className="p-3 bg-blue-500/10 rounded-md border border-blue-500/30">
-                          <p className="font-medium text-blue-600 dark:text-blue-400">Brake Inspection</p>
-                          <p className="text-sm text-blue-600/80 dark:text-blue-300">Scheduled for 2025-10-20</p>
-                        </div>
-                        <div className="p-3 bg-muted rounded-md border border-input">
-                          <p className="font-medium text-muted-foreground">Tire Rotation</p>
-                          <p className="text-sm text-muted-foreground">Last performed: 2025-07-10</p>
+                        <div className="flex items-center gap-4">
+                          <div className="h-10 w-10 rounded-full bg-primary/20 flex items-center justify-center">
+                            <Building2 className="h-5 w-5 text-primary" />
+                          </div>
+                          <div>
+                            <h4 className="font-medium">Bangalore Main Hub</h4>
+                            <p className="text-sm text-muted-foreground">Whitefield - 2.5km away</p>
+                          </div>
+                          <Button variant="ghost" size="sm" className="ml-auto">Book</Button>
                         </div>
                       </div>
+                    </CardContent>
+                  </Card>
+
+                  <Card className="bg-card/60 backdrop-blur-md border-primary/20 shadow-xl">
+                    <CardHeader>
+                      <CardTitle>Past Visits</CardTitle>
+                    </CardHeader>
+                    {/* Example of Empty State */}
+                    <CardContent>
+                      <EmptyState
+                        title="No recent visits"
+                        description="You haven't visited a service center in the last 6 months."
+                        className="py-4"
+                      />
                     </CardContent>
                   </Card>
                 </div>
