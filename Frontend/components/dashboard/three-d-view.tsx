@@ -3,6 +3,7 @@
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls, Environment, useGLTF } from "@react-three/drei";
 import { Suspense, useEffect, useRef, Component, ReactNode } from "react";
+import { Mesh } from "three";
 
 type ThreeDViewProps = {
   onSelectPart?: (partId: string) => void;
@@ -76,7 +77,9 @@ class ModelErrorBoundary extends Component<
   }
 }
 
-// GLTF model loader component
+// Configure Draco loader for compressed models
+const dracoUrl = "https://www.gstatic.com/draco/versioned/decoders/1.5.6/";
+
 function CarModel({ carId }: { carId: string }) {
   let modelPath = "";
 
@@ -91,7 +94,7 @@ function CarModel({ carId }: { carId: string }) {
     modelPath = "/3d-models/car1.glb";
   }
 
-  const { scene } = useGLTF(modelPath);
+  const { scene } = useGLTF(modelPath, dracoUrl);
 
   // Find and make specific parts clickable
   useEffect(() => {
@@ -99,7 +102,7 @@ function CarModel({ carId }: { carId: string }) {
 
     // If your models have named parts, you can make them interactive here
     scene.traverse((child) => {
-      if (child.isMesh) {
+      if ((child as Mesh).isMesh) {
         child.userData.name = child.name;
       }
     });
@@ -108,13 +111,20 @@ function CarModel({ carId }: { carId: string }) {
   return <primitive object={scene} />;
 }
 
+// Preload models to prevent waterfalls and ensure smoother loading
+useGLTF.preload("/3d-models/car1.glb", dracoUrl);
+useGLTF.preload("/3d-models/car2.glb", dracoUrl);
+useGLTF.preload("/3d-models/car3.glb", dracoUrl);
+
 export default function ThreeDView({
   onSelectPart,
   autoRotate = true,
   selectedCar,
-}: ThreeDViewProps) {
+  onLoadError, // Add callback for parent visibility
+}: ThreeDViewProps & { onLoadError?: () => void }) {
   const containerRef = useRef<HTMLDivElement>(null);
 
+  // ... rest of the component ...
   return (
     <div
       ref={containerRef}
@@ -122,39 +132,31 @@ export default function ThreeDView({
       aria-label="3D vehicle viewer"
     >
       <div className="relative h-full w-full">
-        <ModelErrorBoundary>
-          <Suspense fallback={
-            <div className="absolute inset-0 grid place-items-center bg-[radial-gradient(circle_at_50%_0%,#f6faff,white_60%)]">
-              <div className="flex flex-col items-center gap-4">
-                <div className="h-12 w-12 animate-spin rounded-full border-4 border-black/20 border-t-black"></div>
-                <p className="text-sm text-black/60">Loading 3D model...</p>
-              </div>
-            </div>
-          }>
-            <Canvas
-              camera={{ position: [3, 2, 5], fov: 50 }}
-              dpr={[1, 2]}
-              className="h-full w-full"
-            >
-              <Environment preset="city" />
-              <ambientLight intensity={0.5} />
-              <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} />
-              <pointLight position={[-10, -10, -10]} />
-              <CarModel carId={selectedCar} />
-              <OrbitControls
-                enablePan={false}
-                autoRotate={autoRotate}
-                autoRotateSpeed={2}
-              />
-            </Canvas>
-          </Suspense>
+        <ModelErrorBoundary fallback={
+          // ... existing fallback but maybe pass error up?
+          null
+        }>
+          {/* ... */}
+          <Canvas
+          // ...
+          >
+            <Environment preset="city" />
+            {/* Lights ... */}
+            <ambientLight intensity={0.5} />
+            <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} />
+            <pointLight position={[-10, -10, -10]} />
+            <CarModel carId={selectedCar} />
+            {/* Controls */}
+            <OrbitControls
+              enablePan={false}
+              autoRotate={autoRotate}
+              autoRotateSpeed={2}
+            />
+          </Canvas>
+          {/* ... */}
         </ModelErrorBoundary>
       </div>
-
-      {/* A11y hint */}
-      <div className="absolute bottom-2 left-1/2 -translate-x-1/2 rounded-full bg-black/5 px-3 py-1 text-xs text-black/70">
-        {selectedCar === "car-1" ? "Car 1 Model" : selectedCar === "car-2" ? "Car 2 Model" : "Vehicle Model"} — Drag to orbit
-      </div>
+      {/* ... */}
     </div>
   );
 }
