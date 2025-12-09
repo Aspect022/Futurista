@@ -76,7 +76,7 @@ export function LandingHero() {
           initial={prefersReducedMotion ? false : { y: 16, opacity: 0 }}
           animate={prefersReducedMotion ? {} : { y: 0, opacity: 1 }}
           transition={{ duration: 0.6, ease: "easeOut" }}
-          className="text-center text-balance text-white text-6xl md:text-8xl font-semibold tracking-tight leading-[1.1] drop-shadow-[0_2px_6px_rgba(0,0,0,0.25)] md:drop-shadow-[0_3px_10px_rgba(0,0,0,0.35)]"
+          className="text-center text-balance text-white text-5xl md:text-7xl font-semibold tracking-tight leading-[1.1] drop-shadow-[0_2px_6px_rgba(0,0,0,0.25)] md:drop-shadow-[0_3px_10px_rgba(0,0,0,0.35)]"
         >
           Breakdown <span aria-hidden="true">→</span> Breakthrough
         </motion.h1>

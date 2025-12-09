@@ -6,6 +6,9 @@ import { ThemeProvider } from '@/components/theme-provider';
 export const metadata: Metadata = {
   title: 'Futurista - Predictive Vehicle Maintenance',
   description: 'AI-powered predictive maintenance for vehicles',
+  icons: {
+    icon: '/logo.jpg',
+  },
 };
 
 export default function RootLayout({

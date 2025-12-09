@@ -7,13 +7,13 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { UnifiedNavbar } from "@/components/navbar";
-import { 
-  Car, 
-  TrendingUp, 
-  Wrench, 
-  MapPin, 
-  Battery, 
-  Gauge, 
+import {
+  Car,
+  TrendingUp,
+  Wrench,
+  MapPin,
+  Battery,
+  Gauge,
   AlertTriangle,
   CheckCircle,
   Clock
@@ -62,7 +62,7 @@ export default function NewDashboardPage() {
                 <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-foreground">Fleet Dashboard</h1>
                 <p className="text-gray-600 mt-1 dark:text-gray-400">Manage your vehicles and predictive maintenance</p>
               </div>
-              <Button 
+              <Button
                 onClick={() => router.push('/appointment-booking')}
                 className="bg-primary text-primary-foreground hover:bg-primary/90"
               >
@@ -108,7 +108,7 @@ export default function NewDashboardPage() {
                             cx="18"
                             cy="18"
                             r="15.9155"
-                            className="stroke-gray-700"
+                            className="stroke-muted"
                             strokeWidth="3"
                             fill="none"
                           />
@@ -129,10 +129,10 @@ export default function NewDashboardPage() {
                         </div>
                       </div>
                       <p className="mt-4 text-center text-sm text-muted-foreground">
-                        {healthStats.overall >= 80 
-                          ? "Excellent condition" 
-                          : healthStats.overall >= 60 
-                            ? "Good condition" 
+                        {healthStats.overall >= 80
+                          ? "Excellent condition"
+                          : healthStats.overall >= 60
+                            ? "Good condition"
                             : "Needs attention"}
                       </p>
                     </div>
@@ -153,9 +153,9 @@ export default function NewDashboardPage() {
                         <span className="text-2xl font-bold text-foreground">{healthStats.brakeHealth}%</span>
                         <span className="text-xs text-muted-foreground">Good</span>
                       </div>
-                      <div className="mt-2 w-full bg-gray-700 rounded-full h-2">
-                        <div 
-                          className="bg-green-500 h-2 rounded-full" 
+                      <div className="mt-2 w-full bg-muted rounded-full h-2">
+                        <div
+                          className="bg-green-500 h-2 rounded-full"
                           style={{ width: `${healthStats.brakeHealth}%` }}
                         ></div>
                       </div>
@@ -176,9 +176,9 @@ export default function NewDashboardPage() {
                           {healthStats.batteryHealth >= 80 ? "Good" : "Needs attention"}
                         </span>
                       </div>
-                      <div className="mt-2 w-full bg-gray-700 rounded-full h-2">
-                        <div 
-                          className={`h-2 rounded-full ${healthStats.batteryHealth >= 80 ? 'bg-green-500' : 'bg-yellow-500'}`} 
+                      <div className="mt-2 w-full bg-muted rounded-full h-2">
+                        <div
+                          className={`h-2 rounded-full ${healthStats.batteryHealth >= 80 ? 'bg-green-500' : 'bg-yellow-500'}`}
                           style={{ width: `${healthStats.batteryHealth}%` }}
                         ></div>
                       </div>
@@ -197,9 +197,9 @@ export default function NewDashboardPage() {
                         <span className="text-2xl font-bold text-foreground">{healthStats.engineHealth}%</span>
                         <span className="text-xs text-muted-foreground">Excellent</span>
                       </div>
-                      <div className="mt-2 w-full bg-gray-700 rounded-full h-2">
-                        <div 
-                          className="bg-green-500 h-2 rounded-full" 
+                      <div className="mt-2 w-full bg-muted rounded-full h-2">
+                        <div
+                          className="bg-green-500 h-2 rounded-full"
                           style={{ width: `${healthStats.engineHealth}%` }}
                         ></div>
                       </div>
@@ -218,9 +218,9 @@ export default function NewDashboardPage() {
                         <span className="text-2xl font-bold text-foreground">{healthStats.tireHealth}%</span>
                         <span className="text-xs text-muted-foreground">Good</span>
                       </div>
-                      <div className="mt-2 w-full bg-gray-700 rounded-full h-2">
-                        <div 
-                          className="bg-green-500 h-2 rounded-full" 
+                      <div className="mt-2 w-full bg-muted rounded-full h-2">
+                        <div
+                          className="bg-green-500 h-2 rounded-full"
                           style={{ width: `${healthStats.tireHealth}%` }}
                         ></div>
                       </div>
@@ -237,7 +237,7 @@ export default function NewDashboardPage() {
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   {upcomingMaintenance.slice(0, 3).map((task) => (
-                    <Card key={task.id} className="bg-[#111111] border border-gray-700 hover:border-gray-600 transition-colors">
+                    <Card key={task.id} className="bg-card border border-input hover:border-primary/50 transition-colors">
                       <CardContent className="p-4">
                         <div className="flex items-start justify-between">
                           <div>
@@ -246,13 +246,12 @@ export default function NewDashboardPage() {
                               Due in {task.dueIn} km
                             </p>
                           </div>
-                          <span className={`px-2 py-1 rounded-full text-xs ${
-                            task.priority === 'high' 
-                              ? 'bg-red-900 text-red-200' 
-                              : task.priority === 'medium' 
-                                ? 'bg-yellow-900 text-yellow-200' 
-                                : 'bg-green-900 text-green-200'
-                          }`}>
+                          <span className={`px-2 py-1 rounded-full text-xs ${task.priority === 'high'
+                            ? 'bg-red-900 text-red-200'
+                            : task.priority === 'medium'
+                              ? 'bg-yellow-900 text-yellow-200'
+                              : 'bg-green-900 text-green-200'
+                            }`}>
                             {task.priority.toUpperCase()}
                           </span>
                         </div>
@@ -265,23 +264,22 @@ export default function NewDashboardPage() {
               {/* Recent Trips */}
               <div>
                 <div className="flex items-center justify-between mb-4">
-                  <h2 className="text-xl font-semibold">Recent Trips</h2>
-                  <Button variant="outline" size="sm" className="border-black/10 text-black hover:bg-black/5">View All</Button>
+                  <h2 className="text-xl font-semibold text-foreground">Recent Trips</h2>
+                  <Button variant="outline" size="sm" className="border-input text-foreground hover:bg-accent">View All</Button>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {tripHistory.map((trip) => (
-                    <Card key={trip.id} className="bg-[#111111] border border-gray-700 hover:border-gray-600 transition-colors">
+                    <Card key={trip.id} className="bg-card border border-input hover:border-primary/50 transition-colors">
                       <CardContent className="p-4">
                         <div className="flex items-center justify-between">
                           <div>
                             <h3 className="font-medium text-foreground">{trip.origin} → {trip.destination}</h3>
                             <p className="text-sm text-muted-foreground mt-1">{trip.date}</p>
                           </div>
-                          <span className={`px-2 py-1 rounded-full text-xs ${
-                            trip.status === 'completed' 
-                              ? 'bg-green-900 text-green-200' 
-                              : 'bg-blue-900 text-blue-200'
-                          }`}>
+                          <span className={`px-2 py-1 rounded-full text-xs ${trip.status === 'completed'
+                            ? 'bg-green-900 text-green-200'
+                            : 'bg-blue-900 text-blue-200'
+                            }`}>
                             {trip.status.charAt(0).toUpperCase() + trip.status.slice(1)}
                           </span>
                         </div>
@@ -326,16 +324,16 @@ export default function NewDashboardPage() {
                           </div>
                         </div>
                         <div className="mt-4 flex gap-2">
-                          <Button 
-                            variant="outline" 
-                            size="sm" 
+                          <Button
+                            variant="outline"
+                            size="sm"
                             className="w-full"
                             onClick={() => router.push(`/vehicle/${vehicle.id}`)}
                           >
                             View Details
                           </Button>
-                          <Button 
-                            size="sm" 
+                          <Button
+                            size="sm"
                             className="w-full bg-primary hover:bg-primary/90 text-primary-foreground"
                             onClick={() => router.push(`/vehicle/${vehicle.id}/what-if-analysis`)}
                           >
@@ -355,7 +353,7 @@ export default function NewDashboardPage() {
                 <div className="flex items-center justify-between mb-4">
                   <h2 className="text-xl font-semibold text-foreground">Trip Planner & Analysis</h2>
                 </div>
-                
+
                 {/* Trip Planner Form */}
                 <Card className="mb-6">
                   <CardHeader>
@@ -368,47 +366,47 @@ export default function NewDashboardPage() {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
                         <label className="block text-sm font-medium mb-1 text-foreground">Origin</label>
-                        <input 
-                          type="text" 
-                          className="w-full p-2 border border-gray-700 rounded-md bg-gray-900 text-white"
+                        <input
+                          type="text"
+                          className="w-full p-2 border border-input rounded-md bg-input text-foreground"
                           placeholder="Enter starting city"
                         />
                       </div>
                       <div>
                         <label className="block text-sm font-medium mb-1 text-foreground">Destination</label>
-                        <input 
-                          type="text" 
-                          className="w-full p-2 border border-gray-700 rounded-md bg-gray-900 text-white"
+                        <input
+                          type="text"
+                          className="w-full p-2 border border-input rounded-md bg-input text-foreground"
                           placeholder="Enter destination city"
                         />
                       </div>
                       <div>
                         <label className="block text-sm font-medium mb-1 text-foreground">Departure Date</label>
-                        <input 
-                          type="date" 
-                          className="w-full p-2 border border-gray-700 rounded-md bg-gray-900 text-white"
+                        <input
+                          type="date"
+                          className="w-full p-2 border border-input rounded-md bg-input text-foreground"
                         />
                       </div>
                       <div>
                         <label className="block text-sm font-medium mb-1 text-foreground">Passengers</label>
-                        <select className="w-full p-2 border border-gray-700 rounded-md bg-gray-900 text-white">
-                          <option className="bg-black text-white">1</option>
-                          <option className="bg-black text-white">2</option>
-                          <option className="bg-black text-white">3</option>
-                          <option className="bg-black text-white">4</option>
-                          <option className="bg-black text-white">5</option>
+                        <select className="w-full p-2 border border-input rounded-md bg-input text-foreground">
+                          <option>1</option>
+                          <option>2</option>
+                          <option>3</option>
+                          <option>4</option>
+                          <option>5</option>
                         </select>
                       </div>
                       <div className="md:col-span-2">
                         <label className="block text-sm font-medium mb-1 text-foreground">Estimated Distance (km)</label>
-                        <input 
-                          type="number" 
-                          className="w-full p-2 border border-gray-700 rounded-md bg-gray-900 text-white"
+                        <input
+                          type="number"
+                          className="w-full p-2 border border-input rounded-md bg-input text-foreground"
                           placeholder="Enter estimated distance"
                         />
                       </div>
                     </div>
-                    <Button className="mt-4 w-full md:w-auto bg-black text-white hover:bg-gray-800 border border-gray-700">
+                    <Button className="mt-4 w-full md:w-auto bg-primary text-primary-foreground hover:bg-primary/90">
                       <MapPin className="h-4 w-4 mr-2" />
                       Analyze Trip Safety
                     </Button>
@@ -428,23 +426,23 @@ export default function NewDashboardPage() {
                           <p className="font-medium text-yellow-400">CAUTION - Recommendations before you go</p>
                         </div>
                       </div>
-                      
+
                       <h3 className="font-medium mb-2 text-foreground">Predicted Trip Impact</h3>
                       <div className="space-y-3">
-                        <div className="flex justify-between items-center p-3 bg-gray-900 rounded-md">
-                          <span className="text-white">Brake Pads</span>
-                          <span className="text-red-400">Predicted wear: -0.6mm. Remaining life after trip: 12,400 km.</span>
+                        <div className="flex justify-between items-center p-3 bg-muted rounded-md">
+                          <span className="text-foreground">Brake Pads</span>
+                          <span className="text-red-500 dark:text-red-400">Predicted wear: -0.6mm. Remaining life after trip: 12,400 km.</span>
                         </div>
-                        <div className="flex justify-between items-center p-3 bg-gray-900 rounded-md">
-                          <span className="text-white">Tire Tread</span>
-                          <span className="text-white">Predicted wear: -0.2mm. Remaining life after trip: 25,000 km.</span>
+                        <div className="flex justify-between items-center p-3 bg-muted rounded-md">
+                          <span className="text-foreground">Tire Tread</span>
+                          <span className="text-foreground">Predicted wear: -0.2mm. Remaining life after trip: 25,000 km.</span>
                         </div>
-                        <div className="flex justify-between items-center p-3 bg-gray-900 rounded-md">
-                          <span className="text-white">Battery Health</span>
-                          <span className="text-white">Predicted impact: -0.5% State of Health.</span>
+                        <div className="flex justify-between items-center p-3 bg-muted rounded-md">
+                          <span className="text-foreground">Battery Health</span>
+                          <span className="text-foreground">Predicted impact: -0.5% State of Health.</span>
                         </div>
                       </div>
-                      
+
                       <h3 className="font-medium mt-4 mb-2 text-foreground">Pre-Trip Checklist</h3>
                       <div className="space-y-3">
                         <div className="flex items-start p-3 bg-red-900/20 rounded-md border-l-4 border-red-500">
@@ -471,7 +469,7 @@ export default function NewDashboardPage() {
                       </div>
                     </CardContent>
                   </Card>
-                  
+
                   <Card>
                     <CardHeader>
                       <CardTitle>Quick Actions</CardTitle>
@@ -505,10 +503,10 @@ export default function NewDashboardPage() {
             <TabsContent value="maintenance">
               <div className="mb-6">
                 <div className="flex items-center justify-between mb-4">
-                  <h2 className="text-xl font-semibold">Maintenance Schedule</h2>
-                  <Button className="bg-black hover:bg-gray-800 text-white">Create Schedule</Button>
+                  <h2 className="text-xl font-semibold text-foreground">Maintenance Schedule</h2>
+                  <Button className="bg-primary hover:bg-primary/90 text-primary-foreground">Create Schedule</Button>
                 </div>
-                
+
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                   <Card className="lg:col-span-2">
                     <CardHeader>
@@ -517,46 +515,45 @@ export default function NewDashboardPage() {
                     <CardContent>
                       <div className="space-y-4">
                         {upcomingMaintenance.map((task) => (
-                          <div key={task.id} className="flex items-center justify-between p-4 border border-gray-700 rounded-lg bg-gray-900">
+                          <div key={task.id} className="flex items-center justify-between p-4 border border-input rounded-lg bg-card">
                             <div>
-                              <h3 className="font-medium text-white">{task.task}</h3>
-                              <p className="text-sm text-gray-400">Due in {task.dueIn} km</p>
+                              <h3 className="font-medium text-foreground">{task.task}</h3>
+                              <p className="text-sm text-muted-foreground">Due in {task.dueIn} km</p>
                             </div>
                             <div className="flex items-center gap-2">
-                              <span className={`px-2 py-1 rounded-full text-xs ${
-                                task.priority === 'high' 
-                                  ? 'bg-red-900 text-red-200' 
-                                  : task.priority === 'medium' 
-                                    ? 'bg-yellow-900 text-yellow-200' 
-                                    : 'bg-green-900 text-green-200'
-                              }`}>
+                              <span className={`px-2 py-1 rounded-full text-xs ${task.priority === 'high'
+                                ? 'bg-red-500/20 text-red-600 dark:text-red-400'
+                                : task.priority === 'medium'
+                                  ? 'bg-yellow-500/20 text-yellow-600 dark:text-yellow-400'
+                                  : 'bg-green-500/20 text-green-600 dark:text-green-400'
+                                }`}>
                                 {task.priority.toUpperCase()}
                               </span>
-                              <Button size="sm" className="bg-black text-white hover:bg-gray-800 border border-gray-700">Schedule</Button>
+                              <Button size="sm" className="bg-primary text-primary-foreground hover:bg-primary/90">Schedule</Button>
                             </div>
                           </div>
                         ))}
                       </div>
                     </CardContent>
                   </Card>
-                  
+
                   <Card>
                     <CardHeader>
                       <CardTitle>Maintenance History</CardTitle>
                     </CardHeader>
                     <CardContent>
                       <div className="space-y-4">
-                        <div className="p-3 bg-green-900/20 rounded-md border border-gray-700">
-                          <p className="font-medium text-green-400">Oil Change</p>
-                          <p className="text-sm text-green-300">Completed on 2025-09-15</p>
+                        <div className="p-3 bg-green-500/10 rounded-md border border-green-500/30">
+                          <p className="font-medium text-green-600 dark:text-green-400">Oil Change</p>
+                          <p className="text-sm text-green-600/80 dark:text-green-300">Completed on 2025-09-15</p>
                         </div>
-                        <div className="p-3 bg-blue-900/20 rounded-md border border-gray-700">
-                          <p className="font-medium text-blue-400">Brake Inspection</p>
-                          <p className="text-sm text-blue-300">Scheduled for 2025-10-20</p>
+                        <div className="p-3 bg-blue-500/10 rounded-md border border-blue-500/30">
+                          <p className="font-medium text-blue-600 dark:text-blue-400">Brake Inspection</p>
+                          <p className="text-sm text-blue-600/80 dark:text-blue-300">Scheduled for 2025-10-20</p>
                         </div>
-                        <div className="p-3 bg-gray-900/50 rounded-md border border-gray-700">
-                          <p className="font-medium text-gray-300">Tire Rotation</p>
-                          <p className="text-sm text-gray-400">Last performed: 2025-07-10</p>
+                        <div className="p-3 bg-muted rounded-md border border-input">
+                          <p className="font-medium text-muted-foreground">Tire Rotation</p>
+                          <p className="text-sm text-muted-foreground">Last performed: 2025-07-10</p>
                         </div>
                       </div>
                     </CardContent>

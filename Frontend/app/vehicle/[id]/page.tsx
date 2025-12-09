@@ -1,25 +1,38 @@
 "use client";
 
-import { useState, useEffect, Suspense } from "react";
+import { useState, useEffect, Suspense, use } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import dynamic from "next/dynamic";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Line, LineChart, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
-import { 
-  Car, 
-  Edit3, 
-  TrendingUp, 
-  Battery, 
-  Gauge, 
+import {
+  Car,
+  Edit3,
+  TrendingUp,
+  Battery,
+  Gauge,
   AlertTriangle,
   CheckCircle,
   Wrench,
   MapPin
 } from "lucide-react";
 import { UnifiedNavbar } from "@/components/navbar";
-import ThreeDView from "@/components/dashboard/three-d-view";
+
+// Dynamic import with SSR disabled to prevent memory issues
+const ThreeDView = dynamic(() => import("@/components/dashboard/three-d-view"), {
+  ssr: false,
+  loading: () => (
+    <div className="h-full w-full flex items-center justify-center bg-muted">
+      <div className="text-center">
+        <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-primary mx-auto mb-3"></div>
+        <p className="text-muted-foreground">Loading 3D model...</p>
+      </div>
+    </div>
+  ),
+});
 
 // Mock vehicle data
 const vehicleData = {
@@ -72,23 +85,24 @@ const healthData = [
   { date: "Oct 13", health: 88, brake: 83, battery: 91, engine: 87 },
 ];
 
-export default function VehicleDetailsPage({ params }: { params: { id: string } }) {
+export default function VehicleDetailsPage({ params }: { params: Promise<{ id: string }> }) {
+  const resolvedParams = use(params);
   const router = useRouter();
   const [vehicle, setVehicle] = useState<any>(null);
   const [isEditingName, setIsEditingName] = useState(false);
   const [editedName, setEditedName] = useState("");
-  const [selectedCar, setSelectedCar] = useState(params.id);
+  const [selectedCar, setSelectedCar] = useState(resolvedParams.id);
 
   useEffect(() => {
-    const car = vehicleData[params.id as keyof typeof vehicleData];
+    const car = vehicleData[resolvedParams.id as keyof typeof vehicleData];
     if (car) {
       setVehicle(car);
       setEditedName(car.name);
-      setSelectedCar(params.id);
+      setSelectedCar(resolvedParams.id);
     } else {
       router.push("/dashboard-new");
     }
-  }, [params.id, router]);
+  }, [resolvedParams.id, router]);
 
   const handleSaveName = () => {
     // In a real app, you would save this to your backend
@@ -128,17 +142,17 @@ export default function VehicleDetailsPage({ params }: { params: { id: string } 
                       onChange={(e) => setEditedName(e.target.value)}
                       className="text-2xl md:text-3xl font-bold bg-background text-foreground border-input"
                     />
-                    <Button 
-                      size="sm" 
-                      variant="outline" 
+                    <Button
+                      size="sm"
+                      variant="outline"
                       onClick={handleSaveName}
                       className="border-input text-foreground hover:bg-accent"
                     >
                       Save
                     </Button>
-                    <Button 
-                      size="sm" 
-                      variant="ghost" 
+                    <Button
+                      size="sm"
+                      variant="ghost"
                       onClick={() => setIsEditingName(false)}
                       className="text-muted-foreground hover:text-foreground"
                     >
@@ -148,9 +162,9 @@ export default function VehicleDetailsPage({ params }: { params: { id: string } 
                 ) : (
                   <div className="flex items-center gap-2">
                     <h1 className="text-2xl md:text-3xl font-bold text-foreground">{vehicle.name}</h1>
-                    <Button 
-                      variant="ghost" 
-                      size="sm" 
+                    <Button
+                      variant="ghost"
+                      size="sm"
                       onClick={() => setIsEditingName(true)}
                       className="text-muted-foreground hover:text-foreground"
                     >
@@ -160,7 +174,7 @@ export default function VehicleDetailsPage({ params }: { params: { id: string } 
                 )}
                 <p className="text-muted-foreground mt-1">Vehicle details and health monitoring</p>
               </div>
-              
+
               {/* Health Score */}
               <div className="bg-card rounded-xl border border-input p-4 shadow-sm">
                 <div className="flex items-center gap-3">
@@ -240,57 +254,57 @@ export default function VehicleDetailsPage({ params }: { params: { id: string } 
                     <ResponsiveContainer width="100%" height="100%">
                       <LineChart data={healthData}>
                         <CartesianGrid stroke="#f0f0f0" strokeDasharray="3 3" vertical={false} />
-                        <XAxis 
-                          dataKey="date" 
-                          axisLine={false} 
-                          tickLine={false} 
+                        <XAxis
+                          dataKey="date"
+                          axisLine={false}
+                          tickLine={false}
                           tick={{ fontSize: 12, fill: '#6b7280' }}
                         />
-                        <YAxis 
-                          domain={[70, 100]} 
-                          axisLine={false} 
-                          tickLine={false} 
+                        <YAxis
+                          domain={[70, 100]}
+                          axisLine={false}
+                          tickLine={false}
                           tick={{ fontSize: 12, fill: '#6b7280' }}
                         />
-                        <Tooltip 
-                          contentStyle={{ 
-                            backgroundColor: 'white', 
-                            border: '1px solid #e5e7eb', 
+                        <Tooltip
+                          contentStyle={{
+                            backgroundColor: 'white',
+                            border: '1px solid #e5e7eb',
                             borderRadius: '8px',
                             boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
-                          }} 
+                          }}
                         />
-                        <Line 
-                          type="monotone" 
-                          dataKey="health" 
-                          stroke="#10b981" 
-                          strokeWidth={2} 
-                          dot={{ fill: '#10b981', strokeWidth: 0, r: 3 }} 
-                          activeDot={{ r: 5, stroke: '#10b981' }} 
+                        <Line
+                          type="monotone"
+                          dataKey="health"
+                          stroke="#10b981"
+                          strokeWidth={2}
+                          dot={{ fill: '#10b981', strokeWidth: 0, r: 3 }}
+                          activeDot={{ r: 5, stroke: '#10b981' }}
                         />
-                        <Line 
-                          type="monotone" 
-                          dataKey="brake" 
-                          stroke="#3b82f6" 
-                          strokeWidth={2} 
-                          dot={{ fill: '#3b82f6', strokeWidth: 0, r: 3 }} 
-                          activeDot={{ r: 5, stroke: '#3b82f6' }} 
+                        <Line
+                          type="monotone"
+                          dataKey="brake"
+                          stroke="#3b82f6"
+                          strokeWidth={2}
+                          dot={{ fill: '#3b82f6', strokeWidth: 0, r: 3 }}
+                          activeDot={{ r: 5, stroke: '#3b82f6' }}
                         />
-                        <Line 
-                          type="monotone" 
-                          dataKey="battery" 
-                          stroke="#8b5cf6" 
-                          strokeWidth={2} 
-                          dot={{ fill: '#8b5cf6', strokeWidth: 0, r: 3 }} 
-                          activeDot={{ r: 5, stroke: '#8b5cf6' }} 
+                        <Line
+                          type="monotone"
+                          dataKey="battery"
+                          stroke="#8b5cf6"
+                          strokeWidth={2}
+                          dot={{ fill: '#8b5cf6', strokeWidth: 0, r: 3 }}
+                          activeDot={{ r: 5, stroke: '#8b5cf6' }}
                         />
-                        <Line 
-                          type="monotone" 
-                          dataKey="engine" 
-                          stroke="#ef4444" 
-                          strokeWidth={2} 
-                          dot={{ fill: '#ef4444', strokeWidth: 0, r: 3 }} 
-                          activeDot={{ r: 5, stroke: '#ef4444' }} 
+                        <Line
+                          type="monotone"
+                          dataKey="engine"
+                          stroke="#ef4444"
+                          strokeWidth={2}
+                          dot={{ fill: '#ef4444', strokeWidth: 0, r: 3 }}
+                          activeDot={{ r: 5, stroke: '#ef4444' }}
                         />
                       </LineChart>
                     </ResponsiveContainer>
@@ -302,9 +316,9 @@ export default function VehicleDetailsPage({ params }: { params: { id: string } 
             {/* Right Column - Vehicle Info and Actions */}
             <div className="space-y-6">
               {/* Vehicle Information */}
-              <Card className="bg-white border border-gray-200 shadow-sm">
+              <Card className="bg-card border border-input shadow-sm">
                 <CardHeader>
-                  <CardTitle className="flex items-center gap-2 text-gray-800">
+                  <CardTitle className="flex items-center gap-2 text-foreground">
                     <Gauge className="h-5 w-5" />
                     Vehicle Information
                   </CardTitle>
@@ -328,17 +342,17 @@ export default function VehicleDetailsPage({ params }: { params: { id: string } 
                       <div className="font-medium text-foreground">{vehicle.engineHours} hrs</div>
                     </div>
                   </div>
-                  
+
                   <div className="pt-4 border-t border-input">
                     <div className="text-xs text-muted-foreground mb-1">Last Service</div>
                     <div className="font-medium text-foreground">{vehicle.lastService}</div>
                   </div>
-                  
+
                   <div>
                     <div className="text-xs text-muted-foreground mb-1">Next Service</div>
                     <div className="font-medium text-foreground">{vehicle.nextService}</div>
                   </div>
-                  
+
                   <div>
                     <div className="text-xs text-muted-foreground mb-1">Oil Change Due</div>
                     <div className="font-medium text-foreground">{vehicle.oilChangeDue}</div>
@@ -355,23 +369,23 @@ export default function VehicleDetailsPage({ params }: { params: { id: string } 
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-3">
-                  <Button 
+                  <Button
                     className="w-full bg-primary hover:bg-primary/90 text-primary-foreground"
-                    onClick={() => router.push(`/vehicle/${vehicle.id}/what-if-analysis`)}
+                    onClick={() => router.push(`/vehicle/${resolvedParams.id}/what-if-analysis`)}
                   >
                     <TrendingUp className="h-4 w-4 mr-2" />
                     What-If Analysis
                   </Button>
-                  <Button 
-                    variant="outline" 
-                    className="w-full border-gray-300 text-gray-700 hover:bg-gray-50"
+                  <Button
+                    variant="outline"
+                    className="w-full border-input text-foreground hover:bg-accent"
                     onClick={() => router.push(`/appointment-booking`)}
                   >
                     <MapPin className="h-4 w-4 mr-2" />
                     Schedule Service
                   </Button>
-                  <Button 
-                    variant="outline" 
+                  <Button
+                    variant="outline"
                     className="w-full border border-input text-foreground hover:bg-accent"
                   >
                     <CheckCircle className="h-4 w-4 mr-2" />
@@ -394,48 +408,48 @@ export default function VehicleDetailsPage({ params }: { params: { id: string } 
                       <span className="text-muted-foreground">Brake System</span>
                       <span className="font-medium text-foreground">88%</span>
                     </div>
-                    <div className="w-full bg-gray-200 rounded-full h-2">
-                      <div 
-                        className="bg-green-500 h-2 rounded-full" 
+                    <div className="w-full bg-muted rounded-full h-2">
+                      <div
+                        className="bg-green-500 h-2 rounded-full"
                         style={{ width: "88%" }}
                       ></div>
                     </div>
                   </div>
-                  
+
                   <div>
                     <div className="flex justify-between text-sm mb-1">
                       <span className="text-muted-foreground">Battery</span>
                       <span className="font-medium text-foreground">95%</span>
                     </div>
-                    <div className="w-full bg-gray-200 rounded-full h-2">
-                      <div 
-                        className="bg-green-500 h-2 rounded-full" 
+                    <div className="w-full bg-muted rounded-full h-2">
+                      <div
+                        className="bg-green-500 h-2 rounded-full"
                         style={{ width: "95%" }}
                       ></div>
                     </div>
                   </div>
-                  
+
                   <div>
                     <div className="flex justify-between text-sm mb-1">
                       <span className="text-muted-foreground">Engine</span>
                       <span className="font-medium text-foreground">90%</span>
                     </div>
-                    <div className="w-full bg-gray-200 rounded-full h-2">
-                      <div 
-                        className="bg-green-500 h-2 rounded-full" 
+                    <div className="w-full bg-muted rounded-full h-2">
+                      <div
+                        className="bg-green-500 h-2 rounded-full"
                         style={{ width: "90%" }}
                       ></div>
                     </div>
                   </div>
-                  
+
                   <div>
                     <div className="flex justify-between text-sm mb-1">
                       <span className="text-muted-foreground">Transmission</span>
                       <span className="font-medium text-foreground">85%</span>
                     </div>
-                    <div className="w-full bg-gray-200 rounded-full h-2">
-                      <div 
-                        className="bg-green-500 h-2 rounded-full" 
+                    <div className="w-full bg-muted rounded-full h-2">
+                      <div
+                        className="bg-green-500 h-2 rounded-full"
                         style={{ width: "85%" }}
                       ></div>
                     </div>
@@ -447,16 +461,16 @@ export default function VehicleDetailsPage({ params }: { params: { id: string } 
 
           {/* Bottom Action Buttons */}
           <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
-            <Button 
-              size="lg" 
+            <Button
+              size="lg"
               className="bg-primary hover:bg-primary/90 text-primary-foreground px-8 py-3"
-              onClick={() => router.push(`/vehicle/${vehicle.id}/predictive-maintenance`)}
+              onClick={() => router.push(`/vehicle/${resolvedParams.id}/predictive-maintenance`)}
             >
               View Detailed Maintenance Report
             </Button>
-            <Button 
-              size="lg" 
-              variant="outline" 
+            <Button
+              size="lg"
+              variant="outline"
               className="border border-input text-foreground hover:bg-accent px-8 py-3"
               onClick={() => router.push(`/appointment-booking`)}
             >

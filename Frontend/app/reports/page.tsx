@@ -5,12 +5,12 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { UnifiedNavbar } from "@/components/navbar";
-import { 
-  Calendar, 
-  TrendingUp, 
-  MapPin, 
-  Package, 
-  Car, 
+import {
+  Calendar,
+  TrendingUp,
+  MapPin,
+  Package,
+  Car,
   AlertTriangle,
   Activity,
   BarChart3,
@@ -56,7 +56,7 @@ const generateMockData = (): FailureEvent[] => {
 
   const events: FailureEvent[] = [];
   const now = new Date();
-  
+
   for (let i = 0; i < 120; i++) {
     const model = models[Math.floor(Math.random() * models.length)];
     const component = components[Math.floor(Math.random() * components.length)];
@@ -64,14 +64,14 @@ const generateMockData = (): FailureEvent[] => {
     const batch = productionBatches[Math.floor(Math.random() * productionBatches.length)];
     const severity = severities[Math.floor(Math.random() * severities.length)];
     const status = statuses[Math.floor(Math.random() * statuses.length)];
-    
+
     // Random date in the last 180 days
     const failureDate = new Date(now);
     failureDate.setDate(now.getDate() - Math.floor(Math.random() * 180));
-    
+
     // Random mileage between 5000 and 150000
     const mileage = Math.floor(Math.random() * 145000) + 5000;
-    
+
     events.push({
       id: `failure-${i}`,
       vin: `VIN-${Math.floor(Math.random() * 1000000)}`,
@@ -85,7 +85,7 @@ const generateMockData = (): FailureEvent[] => {
       status
     });
   }
-  
+
   return events;
 };
 
@@ -128,7 +128,7 @@ export default function FleetQualityReportsPage() {
 
     // Aggregate data
     const aggregatedMap = new Map<string, AggregatedReport>();
-    
+
     filteredEvents.forEach(event => {
       const key = `${event.component}-${event.model}`;
       if (!aggregatedMap.has(key)) {
@@ -148,7 +148,7 @@ export default function FleetQualityReportsPage() {
       const item = aggregatedMap.get(key)!;
       item.failure_count += 1;
       item.avg_mileage_at_failure = (item.avg_mileage_at_failure * (item.failure_count - 1) + event.mileage_at_failure) / item.failure_count;
-      
+
       // Calculate age at failure (simplified - assuming 1 year = 15000 km)
       const ageInYears = event.mileage_at_failure / 15000;
       item.avg_age_at_failure = (item.avg_age_at_failure * (item.failure_count - 1) + ageInYears) / item.failure_count;
@@ -171,7 +171,7 @@ export default function FleetQualityReportsPage() {
 
     // Calculate KPIs
     const totalIncidents = filteredEvents.length;
-    
+
     // Find top failing component
     const componentCounts = new Map<string, number>();
     filteredEvents.forEach(event => {
@@ -201,7 +201,7 @@ export default function FleetQualityReportsPage() {
     });
 
     // Count open investigations
-    const openInvestigations = filteredEvents.filter(event => 
+    const openInvestigations = filteredEvents.filter(event =>
       event.status === 'Investigation Opened'
     ).length;
 
@@ -238,7 +238,7 @@ export default function FleetQualityReportsPage() {
 
     // Group events by week
     const weeklyData: Record<string, number> = {};
-    
+
     const filteredEvents = mockData.filter(event => {
       const eventDate = new Date(event.failure_date);
       return eventDate >= startDate;
@@ -249,7 +249,7 @@ export default function FleetQualityReportsPage() {
       const weekStart = new Date(eventDate);
       weekStart.setDate(eventDate.getDate() - eventDate.getDay()); // Start of the week
       const weekKey = weekStart.toISOString().split('T')[0];
-      
+
       weeklyData[weekKey] = (weeklyData[weekKey] || 0) + 1;
     });
 
@@ -271,7 +271,7 @@ export default function FleetQualityReportsPage() {
               <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-foreground">Fleet Quality & Failure Analysis</h1>
               <p className="text-muted-foreground mt-2">Comprehensive analytics for engineering and quality teams</p>
             </div>
-            
+
             {/* Date Range Filter */}
             <div className="flex items-center gap-2">
               <Calendar className="h-5 w-5 text-gray-400" />
@@ -356,19 +356,19 @@ export default function FleetQualityReportsPage() {
                     <div className="space-y-2 py-2">
                       {trendData.map((dataPoint, index) => (
                         <div key={index} className="flex items-center min-w-max">
-                          <span className="text-xs text-gray-400 w-20 whitespace-nowrap">{dataPoint.date}</span>
+                          <span className="text-xs text-muted-foreground w-20 whitespace-nowrap">{dataPoint.date}</span>
                           <div className="flex-1 ml-2 min-w-[200px]">
-                            <div 
-                              className="h-6 bg-blue-500 rounded" 
+                            <div
+                              className="h-6 bg-blue-500 rounded"
                               style={{ width: `${Math.min((dataPoint.count / Math.max(...trendData.map(d => d.count)) * 100), 100)}%` }}
                             ></div>
                           </div>
-                          <span className="text-xs text-white ml-2 whitespace-nowrap">{dataPoint.count}</span>
+                          <span className="text-xs text-foreground ml-2 whitespace-nowrap">{dataPoint.count}</span>
                         </div>
                       ))}
                     </div>
                   ) : (
-                    <div className="text-center text-gray-500 py-10">No data available for the selected range</div>
+                    <div className="text-center text-muted-foreground py-10">No data available for the selected range</div>
                   )}
                 </div>
               </div>
@@ -390,19 +390,19 @@ export default function FleetQualityReportsPage() {
                     <div className="space-y-2 py-2">
                       {filteredData.slice(0, 8).map((item, index) => (
                         <div key={index} className="flex items-center min-w-max">
-                          <span className="text-xs text-gray-400 w-24 whitespace-nowrap truncate">{item.production_batch}</span>
+                          <span className="text-xs text-muted-foreground w-24 whitespace-nowrap truncate">{item.production_batch}</span>
                           <div className="flex-1 ml-2 min-w-[200px]">
-                            <div 
-                              className="h-6 bg-green-500 rounded" 
+                            <div
+                              className="h-6 bg-green-500 rounded"
                               style={{ width: `${Math.min((item.failure_count / Math.max(...filteredData.map(d => d.failure_count)) * 100), 100)}%` }}
                             ></div>
                           </div>
-                          <span className="text-xs text-white ml-2 whitespace-nowrap">{item.failure_count}</span>
+                          <span className="text-xs text-foreground ml-2 whitespace-nowrap">{item.failure_count}</span>
                         </div>
                       ))}
                     </div>
                   ) : (
-                    <div className="text-center text-gray-500 py-10">No data available for the selected range</div>
+                    <div className="text-center text-muted-foreground py-10">No data available for the selected range</div>
                   )}
                 </div>
               </div>
@@ -438,7 +438,7 @@ export default function FleetQualityReportsPage() {
             <div className="overflow-x-auto">
               <table className="w-full">
                 <thead>
-                  <tr className="border-b border-gray-700 text-left text-gray-400">
+                  <tr className="border-b border-input text-left text-muted-foreground">
                     <th className="py-3 px-4">Component</th>
                     <th className="py-3 px-4">Model</th>
                     <th className="py-3 px-4">Failures</th>
@@ -451,31 +451,31 @@ export default function FleetQualityReportsPage() {
                 <tbody>
                   {filteredData.length > 0 ? (
                     filteredData.map((item, index) => (
-                      <tr key={index} className="border-b border-gray-800 hover:bg-gray-800">
-                        <td className="py-3 px-4 font-medium text-white">{item.component}</td>
-                        <td className="py-3 px-4 text-gray-300">{item.model}</td>
-                        <td className="py-3 px-4 text-white">{item.failure_count}</td>
+                      <tr key={index} className="border-b border-input hover:bg-accent">
+                        <td className="py-3 px-4 font-medium text-foreground">{item.component}</td>
+                        <td className="py-3 px-4 text-muted-foreground">{item.model}</td>
+                        <td className="py-3 px-4 text-foreground">{item.failure_count}</td>
                         <td className="py-3 px-4">
                           <div className="flex items-center">
-                            <span className="text-white">{item.failure_rate}%</span>
+                            <span className="text-foreground">{item.failure_rate}%</span>
                             {item.failure_rate > 5 && (
-                              <span className="ml-2 bg-red-900/30 text-red-400 text-xs px-2 py-1 rounded">HIGH</span>
+                              <span className="ml-2 bg-red-500/20 text-red-600 dark:text-red-400 text-xs px-2 py-1 rounded">HIGH</span>
                             )}
                           </div>
                         </td>
-                        <td className="py-3 px-4 text-gray-300">{item.avg_mileage_at_failure.toLocaleString()} km</td>
-                        <td className="py-3 px-4 text-gray-300">{item.avg_age_at_failure.toFixed(1)} yrs</td>
+                        <td className="py-3 px-4 text-muted-foreground">{item.avg_mileage_at_failure.toLocaleString()} km</td>
+                        <td className="py-3 px-4 text-muted-foreground">{item.avg_age_at_failure.toFixed(1)} yrs</td>
                         <td className="py-3 px-4">
-                          <Badge 
-                            variant="outline" 
+                          <Badge
+                            variant="outline"
                             className={
-                              item.status === 'Investigation Opened' 
-                                ? 'border-red-500 text-red-400' 
-                                : item.status === 'Resolved' 
-                                  ? 'border-green-500 text-green-400' 
-                                  : item.status === 'Monitoring' 
-                                    ? 'border-yellow-500 text-yellow-400' 
-                                    : 'border-gray-500 text-gray-400'
+                              item.status === 'Investigation Opened'
+                                ? 'border-red-500 text-red-600 dark:text-red-400'
+                                : item.status === 'Resolved'
+                                  ? 'border-green-500 text-green-600 dark:text-green-400'
+                                  : item.status === 'Monitoring'
+                                    ? 'border-yellow-500 text-yellow-600 dark:text-yellow-400'
+                                    : 'border-muted-foreground text-muted-foreground'
                             }
                           >
                             {item.status}
@@ -485,7 +485,7 @@ export default function FleetQualityReportsPage() {
                     ))
                   ) : (
                     <tr>
-                      <td colSpan={7} className="py-8 px-4 text-center text-gray-500">
+                      <td colSpan={7} className="py-8 px-4 text-center text-muted-foreground">
                         No failure data available for the selected date range
                       </td>
                     </tr>

@@ -123,26 +123,26 @@ export default function AppointmentBookingPage() {
                 <h3 className="font-medium text-foreground">Downtown Service Center</h3>
                 <p className="text-sm text-muted-foreground">120 Market St.</p>
                 <div className="mt-2 flex items-center gap-4 text-sm">
-                  <span className="text-green-600">Open now</span>
+                  <span className="text-green-600 dark:text-green-400">Open now</span>
                   <span className="text-foreground">5 min away</span>
                 </div>
               </div>
 
-              <div className="p-4 border border-black/10 rounded-xl hover:bg-gray-50 transition-colors">
-                <h3 className="font-medium">Northside Maintenance Hub</h3>
-                <p className="text-sm text-gray-600">431 Woodland Ave.</p>
+              <div className="p-4 border border-input rounded-lg hover:bg-accent transition-colors">
+                <h3 className="font-medium text-foreground">Northside Maintenance Hub</h3>
+                <p className="text-sm text-muted-foreground">431 Woodland Ave.</p>
                 <div className="mt-2 flex items-center gap-4 text-sm">
-                  <span className="text-green-600">Open now</span>
-                  <span>12 min away</span>
+                  <span className="text-green-600 dark:text-green-400">Open now</span>
+                  <span className="text-foreground">12 min away</span>
                 </div>
               </div>
 
-              <div className="p-4 border border-black/10 rounded-xl hover:bg-gray-50 transition-colors">
-                <h3 className="font-medium">Express Care Center</h3>
-                <p className="text-sm text-gray-600">780 Highway 101</p>
+              <div className="p-4 border border-input rounded-lg hover:bg-accent transition-colors">
+                <h3 className="font-medium text-foreground">Express Care Center</h3>
+                <p className="text-sm text-muted-foreground">780 Highway 101</p>
                 <div className="mt-2 flex items-center gap-4 text-sm">
-                  <span className="text-green-600">Open now</span>
-                  <span>18 min away</span>
+                  <span className="text-green-600 dark:text-green-400">Open now</span>
+                  <span className="text-foreground">18 min away</span>
                 </div>
               </div>
             </div>
@@ -153,7 +153,7 @@ export default function AppointmentBookingPage() {
             onSubmit={handleSubmit}
             className="bg-card rounded-xl border border-input p-6 shadow-sm"
           >
-            <h2 className="text-xl font-semibold mb-6 flex items-center gap-2 text-white">
+            <h2 className="text-xl font-semibold mb-6 flex items-center gap-2 text-foreground">
               <Calendar className="h-5 w-5" />
               Appointment Details
             </h2>
@@ -166,18 +166,17 @@ export default function AppointmentBookingPage() {
                   {cars.map((car) => (
                     <div
                       key={car.id}
-                      className={`border rounded-xl p-3 cursor-pointer transition-all ${
-                        formData.carId === car.id
-                          ? "border-black bg-blue-50"
-                          : "border-black/10 hover:border-black/30"
-                      }`}
+                      className={`border rounded-xl p-3 cursor-pointer transition-all ${formData.carId === car.id
+                        ? "border-primary bg-primary/10"
+                        : "border-input hover:border-primary/50"
+                        }`}
                       onClick={() => handleSelectChange("carId", car.id)}
                     >
                       <div className="flex items-center gap-2">
                         <Car className="h-4 w-4" />
-                        <span className="font-medium">{car.name}</span>
+                        <span className="font-medium text-foreground">{car.name}</span>
                       </div>
-                      <div className="text-xs text-gray-600 mt-1">
+                      <div className="text-xs text-muted-foreground mt-1">
                         {car.year} • {car.mileage.toLocaleString()} km
                       </div>
                     </div>
