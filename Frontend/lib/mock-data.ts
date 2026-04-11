@@ -243,20 +243,20 @@ export const CAR_DATA: Record<string, VehicleFullData> = {
 export const ANOMALIES = [
     {
         ts: "2025-10-14 12:20",
-        metric: "Brake temp deviation",
+        metric: "Brakes got unusually hot",
         severity: "high",
-        description: "High brake temperature deviation detected",
+        description: "Your brakes were hotter than normal during your last drive",
     },
     {
         ts: "2025-10-14 11:50",
-        metric: "Battery voltage variance",
+        metric: "Battery charge was unsteady",
         severity: "medium",
-        description: "Voltage variance above baseline",
+        description: "Your battery voltage dipped briefly — could be an early sign of wear",
     },
     {
         ts: "2025-10-14 10:05",
-        metric: "Engine vibration spike",
+        metric: "Engine revved harder than normal",
         severity: "low",
-        description: "Transient vibration spike observed",
+        description: "A brief spike in engine vibration was detected — likely nothing serious",
     },
 ];

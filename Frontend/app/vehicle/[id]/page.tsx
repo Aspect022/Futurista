@@ -92,6 +92,7 @@ export default function VehicleDetailsPage({ params }: { params: Promise<{ id: s
   const [isEditingName, setIsEditingName] = useState(false);
   const [editedName, setEditedName] = useState("");
   const [selectedCar, setSelectedCar] = useState(resolvedParams.id);
+  const [show3D, setShow3D] = useState(false);
 
   useEffect(() => {
     const car = vehicleData[resolvedParams.id as keyof typeof vehicleData];
@@ -217,28 +218,38 @@ export default function VehicleDetailsPage({ params }: { params: Promise<{ id: s
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* Left Column - 3D View */}
             <div className="lg:col-span-2 space-y-6">
-              {/* 3D Car Viewer */}
+              {/* 3D Car Viewer — behind a button to avoid slow loads */}
               <Card className="bg-card border border-input shadow-sm">
                 <CardHeader>
-                  <CardTitle className="flex items-center gap-2 text-foreground">
-                    <Car className="h-5 w-5" />
-                    3D Vehicle View
+                  <CardTitle className="flex items-center justify-between text-foreground">
+                    <div className="flex items-center gap-2">
+                      <Car className="h-5 w-5" />
+                      3D Vehicle View
+                    </div>
+                    <button
+                      onClick={() => setShow3D((v) => !v)}
+                      className="text-sm font-medium px-4 py-1.5 rounded-lg border border-input hover:bg-muted transition-colors"
+                    >
+                      {show3D ? "Hide 3D" : "View in 3D"}
+                    </button>
                   </CardTitle>
                 </CardHeader>
-                <CardContent className="p-0">
-                  <div className="h-[500px] w-full relative">
-                    <Suspense fallback={
-                      <div className="h-full w-full flex items-center justify-center bg-muted">
-                        <div className="text-center">
-                          <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-primary mx-auto mb-3"></div>
-                          <p className="text-muted-foreground">Loading 3D model...</p>
+                {show3D && (
+                  <CardContent className="p-0">
+                    <div className="h-[500px] w-full relative">
+                      <Suspense fallback={
+                        <div className="h-full w-full flex items-center justify-center bg-muted">
+                          <div className="text-center">
+                            <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-primary mx-auto mb-3"></div>
+                            <p className="text-muted-foreground">Loading 3D model...</p>
+                          </div>
                         </div>
-                      </div>
-                    }>
-                      <ThreeDView selectedCar={selectedCar} />
-                    </Suspense>
-                  </div>
-                </CardContent>
+                      }>
+                        <ThreeDView selectedCar={selectedCar} />
+                      </Suspense>
+                    </div>
+                  </CardContent>
+                )}
               </Card>
 
               {/* Health Trends Chart */}
@@ -334,8 +345,8 @@ export default function VehicleDetailsPage({ params }: { params: Promise<{ id: s
                       <div className="font-medium text-foreground">{vehicle.mileage.toLocaleString()} km</div>
                     </div>
                     <div>
-                      <div className="text-xs text-muted-foreground">VIN</div>
-                      <div className="font-medium text-foreground text-sm">{vehicle.vin}</div>
+                      <div className="text-xs text-muted-foreground">Status</div>
+                      <div className="font-medium text-foreground text-sm">{vehicle.health >= 70 ? "Good" : vehicle.health >= 50 ? "Fair" : "Needs Attention"}</div>
                     </div>
                     <div>
                       <div className="text-xs text-muted-foreground">Engine Hours</div>

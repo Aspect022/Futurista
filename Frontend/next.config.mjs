@@ -9,8 +9,8 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
-  // Enable static file serving for 3D models
-  output: 'standalone',
+  // Fix for multiple lockfiles warning — point tracing to this directory
+  outputFileTracingRoot: new URL('.', import.meta.url).pathname,
   // Configure webpack to handle 3D model files
   webpack: (config) => {
     config.module.rules.push({

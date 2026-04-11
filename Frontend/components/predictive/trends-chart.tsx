@@ -18,24 +18,24 @@ export function TrendsChart({ data }: { data: TrendsData }) {
   const chartData = data[tab]
 
   return (
-    <div className="rounded-2xl border border-black/10 bg-white p-5 shadow-sm">
+    <div className="rounded-2xl border border-border bg-card text-card-foreground p-5 shadow-sm">
       <Tabs value={tab} onValueChange={(v) => setTab(v as any)} className="w-full">
-        <TabsList className="bg-black/5 text-black/60">
+        <TabsList className="bg-muted text-muted-foreground">
           <TabsTrigger
             value="brake"
-            className="data-[state=active]:bg-white data-[state=active]:text-black text-black/70"
+            className="data-[state=active]:bg-background data-[state=active]:text-foreground text-muted-foreground"
           >
             Brake
           </TabsTrigger>
           <TabsTrigger
             value="battery"
-            className="data-[state=active]:bg-white data-[state=active]:text-black text-black/70"
+            className="data-[state=active]:bg-background data-[state=active]:text-foreground text-muted-foreground"
           >
             Battery
           </TabsTrigger>
           <TabsTrigger
             value="engine"
-            className="data-[state=active]:bg-white data-[state=active]:text-black text-black/70"
+            className="data-[state=active]:bg-background data-[state=active]:text-foreground text-muted-foreground"
           >
             Engine
           </TabsTrigger>
@@ -44,18 +44,16 @@ export function TrendsChart({ data }: { data: TrendsData }) {
           <div className="h-72 w-full">
             <ChartContainer
               config={{
-                // Provide label/color for the single series key used by the chart
-                value: { label: "Health", color: "#111111" },
+                value: { label: "Health", color: "hsl(var(--foreground))" },
               }}
               className="h-full w-full"
             >
               <LineChart data={chartData} margin={{ top: 10, right: 20, left: 0, bottom: 0 }}>
-                <CartesianGrid stroke="#EAEAEA" strokeDasharray="3 3" />
-                <XAxis dataKey="day" stroke="#111111" tick={{ fill: "#111111", fontSize: 12 }} />
-                <YAxis stroke="#111111" tick={{ fill: "#111111", fontSize: 12 }} />
+                <CartesianGrid stroke="hsl(var(--border))" strokeDasharray="3 3" />
+                <XAxis dataKey="day" stroke="hsl(var(--muted-foreground))" tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 12 }} />
+                <YAxis stroke="hsl(var(--muted-foreground))" tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 12 }} />
                 <Tooltip content={<ChartTooltipContent />} />
-                {/* Neutral grayscale lines */}
-                <Line type="monotone" dataKey="value" stroke="#111111" strokeWidth={2} dot={false} />
+                <Line type="monotone" dataKey="value" stroke="hsl(var(--foreground))" strokeWidth={2} dot={false} />
               </LineChart>
             </ChartContainer>
           </div>

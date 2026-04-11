@@ -16,7 +16,8 @@ import {
   BarChart3,
   Users,
   CheckCircle,
-  Clock
+  Clock,
+  Sparkles
 } from "lucide-react";
 
 // Data interfaces
@@ -100,6 +101,34 @@ export default function FleetQualityReportsPage() {
     mostAffectedModel: '',
     openInvestigations: 0
   });
+
+  // AI Summary State
+  const [summary, setSummary] = useState<string | null>(null);
+  const [isGeneratingSummary, setIsGeneratingSummary] = useState(false);
+
+  const generateSummary = async () => {
+    setIsGeneratingSummary(true);
+    try {
+      const response = await fetch("/api/report-summary", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          aggregatedData: {
+            totalVehicles: 2400, // Mock total
+            averageHealth: 88, // Mock avg
+            criticalAlerts: 12, // Mock alerts
+            topFailureMode: kpiData.topFailingComponent || "Brake Pads"
+          }
+        })
+      });
+      const data = await response.json();
+      setSummary(data.summary);
+    } catch (error) {
+      console.error("Error generating summary:", error);
+    } finally {
+      setIsGeneratingSummary(false);
+    }
+  };
 
   // Filter and aggregate data based on date range
   useEffect(() => {
@@ -291,6 +320,43 @@ export default function FleetQualityReportsPage() {
             </div>
           </div>
         </header>
+
+        {/* AI Executive Summary Card */}
+        <Card className="bg-gradient-to-r from-indigo-50 to-blue-50 dark:from-indigo-950/20 dark:to-blue-950/20 border-indigo-100 dark:border-indigo-900 mb-8">
+          <CardHeader className="flex flex-row items-center justify-between pb-2">
+            <CardTitle className="text-lg font-semibold text-indigo-900 dark:text-indigo-300 flex items-center gap-2">
+              <Sparkles className="h-5 w-5 text-indigo-500" />
+              AI Executive Summary
+            </CardTitle>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={generateSummary}
+              disabled={isGeneratingSummary}
+              className="text-indigo-600 border-indigo-200 hover:bg-indigo-50"
+            >
+              {isGeneratingSummary ? (
+                <>
+                  <div className="h-4 w-4 mr-2 animate-spin rounded-full border-2 border-indigo-600 border-t-transparent"></div>
+                  Generating...
+                </>
+              ) : (
+                summary ? "Regenerate" : "Generate Report"
+              )}
+            </Button>
+          </CardHeader>
+          <CardContent>
+            {summary ? (
+              <div className="prose prose-sm max-w-none text-indigo-900/80 dark:text-indigo-200/80">
+                <div className="whitespace-pre-wrap font-medium">{summary}</div>
+              </div>
+            ) : (
+              <p className="text-sm text-muted-foreground italic">
+                Generate an AI-powered summary of the current fleet health, failure trends, and key recommendations.
+              </p>
+            )}
+          </CardContent>
+        </Card>
 
         {/* KPI Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">

@@ -9,12 +9,12 @@ import { Slider } from "@/components/ui/slider";
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "@/components/ui/breadcrumb";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { UnifiedNavbar } from "@/components/navbar";
-import { 
-  TrendingUp, 
-  TrendingDown, 
-  MapPin, 
-  AlertTriangle, 
-  CheckCircle, 
+import {
+  TrendingUp,
+  TrendingDown,
+  MapPin,
+  AlertTriangle,
+  CheckCircle,
   Clock,
   Wrench,
   Car
@@ -52,12 +52,12 @@ const baselinePredictions = {
 const generateDegradationCurve = (component: string, drivingStyle: number) => {
   // Base values for normal driving (style = 50)
   const baselineLifespan = baselinePredictions[component as keyof typeof baselinePredictions] || 365;
-  
+
   // Calculate lifespan based on driving style
   // More aggressive driving reduces lifespan
   const styleFactor = (drivingStyle - 50) / 10; // -2.5 to 2.5 range
   const newLifespan = Math.max(30, baselineLifespan - (styleFactor * (baselineLifespan * 0.02)));
-  
+
   // Generate 7 points for the degradation curve
   const curve = [];
   for (let i = 0; i < 7; i++) {
@@ -69,7 +69,7 @@ const generateDegradationCurve = (component: string, drivingStyle: number) => {
       health: 100 - degradation
     });
   }
-  
+
   return curve;
 };
 
@@ -97,20 +97,56 @@ export default function WhatIfAnalysisPage({ params }: { params: Promise<{ id: s
   const [loading, setLoading] = useState<boolean>(true);
   const [carInfo, setCarInfo] = useState<any>(null);
 
+  // AI What-If Analysis State
+  const [userQuestion, setUserQuestion] = useState("");
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [aiResponse, setAiResponse] = useState<{ analysis: string; safety_score: number } | null>(null);
+
+  const handleAiAnalysis = async () => {
+    if (!userQuestion.trim() || !carInfo) return;
+
+    setIsAnalyzing(true);
+    setAiResponse(null);
+
+    try {
+      const response = await fetch("/api/what-if-analysis", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          vehicleData: {
+            model: carInfo.model,
+            mileage: 45000,
+            health: 92,
+            tireCondition: "Good (4.0mm)",
+            brakeCondition: "Worn (3.1mm)"
+          },
+          userQuestion
+        })
+      });
+
+      const data = await response.json();
+      setAiResponse(data);
+    } catch (error) {
+      console.error("AI Analysis failed:", error);
+    } finally {
+      setIsAnalyzing(false);
+    }
+  };
+
   // Resolve params Promise
   useEffect(() => {
     const resolveParams = async () => {
       const resolved = await params;
       setResolvedParams(resolved);
     };
-    
+
     resolveParams();
   }, [params]);
 
   // Get car info based on ID
   useEffect(() => {
     if (!resolvedParams) return;
-    
+
     const car = carData[resolvedParams.id as keyof typeof carData];
     if (car) {
       setCarInfo(car);
@@ -124,7 +160,7 @@ export default function WhatIfAnalysisPage({ params }: { params: Promise<{ id: s
     if (!carInfo) return;
 
     setLoading(true);
-    
+
     // Simulate API call delay
     setTimeout(() => {
       const styleValue = drivingStyle[0];
@@ -133,14 +169,14 @@ export default function WhatIfAnalysisPage({ params }: { params: Promise<{ id: s
         const baselineLifespan = baselinePredictions[component as keyof typeof baselinePredictions];
         const styleFactor = (styleValue - 50) / 10; // -2.5 to 2.5 range
         const newLifespan = Math.max(30, baselineLifespan - (styleFactor * (baselineLifespan * 0.02)));
-        
+
         return {
           component,
           lifespan_days: Math.round(newLifespan),
           impact: Math.round(newLifespan - baselineLifespan),
         };
       });
-      
+
       setPredictions(newPredictions);
       setLoading(false);
     }, 500); // Simulate API call
@@ -149,20 +185,20 @@ export default function WhatIfAnalysisPage({ params }: { params: Promise<{ id: s
   // Handle trip analysis form submission
   const handleTripAnalysis = async () => {
     if (!carInfo) return;
-    
+
     // Get form values
     const origin = (document.getElementById('origin') as HTMLInputElement)?.value;
     const destination = (document.getElementById('destination') as HTMLInputElement)?.value;
     const departureDate = (document.getElementById('departure-date') as HTMLInputElement)?.value;
     const passengers = (document.getElementById('passengers') as HTMLSelectElement)?.value;
     const distance = (document.getElementById('distance') as HTMLInputElement)?.value;
-    
+
     // Validate form
     if (!origin || !destination || !departureDate || !distance) {
       alert('Please fill in all required fields');
       return;
     }
-    
+
     // Prepare vehicle data (mock data for now)
     const vehicleData = {
       model: carInfo.model,
@@ -172,7 +208,7 @@ export default function WhatIfAnalysisPage({ params }: { params: Promise<{ id: s
       engineHealth: 95, // Mock engine health
       tireTreadDepth: 4.0, // Mock tire tread depth
     };
-    
+
     // Prepare trip parameters
     const tripParameters = {
       origin,
@@ -182,10 +218,10 @@ export default function WhatIfAnalysisPage({ params }: { params: Promise<{ id: s
       passengers: parseInt(passengers),
       terrain: "Mix of highway and winding ghat sections (mountain roads)", // Default terrain
     };
-    
+
     // Show loading state
     setLoading(true);
-    
+
     try {
       // In a real implementation, you would call your API here:
       // const response = await fetch('/api/trip-analysis', {
@@ -200,10 +236,10 @@ export default function WhatIfAnalysisPage({ params }: { params: Promise<{ id: s
       // });
       // 
       // const result = await response.json();
-      
+
       // For now, simulate API call with timeout
       await new Promise(resolve => setTimeout(resolve, 1500));
-      
+
       // Show success message or update UI with results
       alert('Trip analysis complete! Check the results below.');
     } catch (error) {
@@ -222,7 +258,7 @@ export default function WhatIfAnalysisPage({ params }: { params: Promise<{ id: s
     <main className="min-h-dvh bg-background text-foreground">
       <UnifiedNavbar />
 
-      <div className="pt-16 min-h-dvh bg-gradient-to-b from-gray-50 to-white">
+      <div className="pt-16 min-h-dvh bg-background">
         <section className="max-w-6xl mx-auto px-4 md:px-6 py-8 md:py-10">
           {/* Breadcrumbs */}
           <div className="mb-6">
@@ -230,7 +266,7 @@ export default function WhatIfAnalysisPage({ params }: { params: Promise<{ id: s
               <BreadcrumbList>
                 <BreadcrumbItem>
                   <BreadcrumbLink href="/dashboard-new" className="text-muted-foreground hover:text-foreground">
-                    Dashboard
+                    My Car
                   </BreadcrumbLink>
                 </BreadcrumbItem>
                 <BreadcrumbSeparator />
@@ -241,7 +277,7 @@ export default function WhatIfAnalysisPage({ params }: { params: Promise<{ id: s
                 </BreadcrumbItem>
                 <BreadcrumbSeparator />
                 <BreadcrumbItem>
-                  <BreadcrumbPage className="text-foreground font-medium">What-If Analysis</BreadcrumbPage>
+                  <BreadcrumbPage className="text-foreground font-medium">Road Trip Check</BreadcrumbPage>
                 </BreadcrumbItem>
               </BreadcrumbList>
             </Breadcrumb>
@@ -251,20 +287,20 @@ export default function WhatIfAnalysisPage({ params }: { params: Promise<{ id: s
           <header className="mb-8">
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
               <div>
-                <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-foreground">What-If Analysis</h1>
-                <p className="text-muted-foreground mt-2">See how your driving style and trips impact your vehicle's health.</p>
+                <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-foreground">Road Trip Safety Check</h1>
+                <p className="text-muted-foreground mt-2">Planning a trip? Let&apos;s make sure your car can handle it.</p>
               </div>
             </div>
 
             {/* Vehicle info row */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="rounded-lg border border-input bg-card p-4 shadow-sm">
-                <div className="text-xs text-muted-foreground">Model</div>
+                <div className="text-xs text-muted-foreground">Car</div>
                 <div className="text-sm font-medium text-foreground">{carInfo.model}</div>
               </div>
               <div className="rounded-lg border border-input bg-card p-4 shadow-sm">
-                <div className="text-xs text-muted-foreground">VIN</div>
-                <div className="text-sm font-medium text-foreground">{carInfo.vin}</div>
+                <div className="text-xs text-muted-foreground">Status</div>
+                <div className="text-sm font-medium text-foreground">48% Health — Needs Attention</div>
               </div>
             </div>
           </header>
@@ -280,119 +316,103 @@ export default function WhatIfAnalysisPage({ params }: { params: Promise<{ id: s
               </TabsTrigger>
             </TabsList>
 
-            {/* Driving Style Analysis Tab */}
+            {/* AI Scenario Simulator Code Block */}
             <TabsContent value="driving-style">
               <div className="mb-10">
-                <div className="bg-white rounded-2xl border border-black/10 p-6 shadow-sm">
+                {/* AI Chat Interface */}
+                <Card className="border-primary/20 shadow-md">
+                  <CardHeader className="bg-primary/5 border-b border-primary/10">
+                    <CardTitle className="flex items-center gap-2 text-primary">
+                      <div className="p-1.5 bg-primary/10 rounded-full">
+                        <TrendingUp className="h-5 w-5" />
+                      </div>
+                      AI Scenario Simulator
+                    </CardTitle>
+                    <p className="text-sm text-muted-foreground">
+                      Ask "What If" questions to predict vehicle behavior in specific scenarios.
+                    </p>
+                  </CardHeader>
+                  <CardContent className="p-6">
+                    <div className="flex flex-col gap-4">
+                      {/* Chat Output Area */}
+                      {aiResponse && (
+                        <div className="mb-4 p-4 rounded-lg bg-muted/50 border border-border animate-in fade-in slide-in-from-bottom-2">
+                          <div className="flex items-start justify-between mb-2">
+                            <h3 className="font-semibold text-foreground flex items-center gap-2">
+                              AI Analysis
+                              <span className={`text-xs px-2 py-0.5 rounded-full ${aiResponse.safety_score > 80 ? 'bg-green-100 text-green-700' :
+                                aiResponse.safety_score > 50 ? 'bg-yellow-100 text-yellow-700' :
+                                  'bg-red-100 text-red-700'
+                                }`}>
+                                Safety Score: {aiResponse.safety_score}/100
+                              </span>
+                            </h3>
+                          </div>
+                          <p className="text-sm text-foreground/90 leading-relaxed">
+                            {aiResponse.analysis}
+                          </p>
+                        </div>
+                      )}
+
+                      {/* Input Area */}
+                      <div className="flex gap-2">
+                        <input
+                          type="text"
+                          placeholder="E.g., What if I drive 500km on rough terrain with my current tires?"
+                          className="flex-1 p-3 rounded-md border border-input bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
+                          value={userQuestion}
+                          onChange={(e) => setUserQuestion(e.target.value)}
+                          onKeyDown={(e) => e.key === 'Enter' && handleAiAnalysis()}
+                        />
+                        <Button
+                          onClick={handleAiAnalysis}
+                          disabled={isAnalyzing || !userQuestion.trim()}
+                          className="bg-primary text-primary-foreground hover:bg-primary/90"
+                        >
+                          {isAnalyzing ? (
+                            <div className="h-5 w-5 animate-spin rounded-full border-2 border-white/30 border-t-white" />
+                          ) : (
+                            'Simulate'
+                          )}
+                        </Button>
+                      </div>
+
+                      {/* Suggested Queries */}
+                      <div className="flex flex-wrap gap-2 mt-2">
+                        {["What if I ignore the brake warning?", "Impact of towing a heavy trailer?", "Driving in 45°C heat?"].map((q) => (
+                          <button
+                            key={q}
+                            onClick={() => { setUserQuestion(q); }}
+                            className="text-xs px-3 py-1.5 rounded-full bg-secondary text-secondary-foreground hover:bg-secondary/80 transition-colors"
+                          >
+                            {q}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+
+              {/* Driving Style Slider (Legacy) - Keeping it below for reference */}
+              <div className="mb-10 opacity-70 hover:opacity-100 transition-opacity">
+                {/* ... existing slider code ... */}
+                <div className="bg-card rounded-2xl border border-border p-6 shadow-sm">
                   <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-4">
-                    <h2 className="text-xl font-semibold">Driving Style</h2>
-                    <div className="text-lg font-medium mt-2 md:mt-0">
+                    <h2 className="text-lg font-semibold text-muted-foreground">Manual Driving Style Adjustment</h2>
+                    <div className="text-sm font-medium mt-2 md:mt-0 text-muted-foreground">
                       {getDrivingStyleLabel(drivingStyle[0])}
                     </div>
                   </div>
-                  
-                  <div className="space-y-4">
-                    <div className="flex justify-between text-sm text-muted-foreground">
-                      <span>Calm</span>
-                      <span>Aggressive</span>
-                    </div>
-                    
-                    <Slider
-                      value={drivingStyle}
-                      onValueChange={setDrivingStyle}
-                      max={100}
-                      step={1}
-                      className="w-full"
-                    />
-                    
-                    <div className="flex justify-between text-xs text-muted-foreground">
-                      <span>0</span>
-                      <span>25</span>
-                      <span>50 (Normal)</span>
-                      <span>75</span>
-                      <span>100</span>
-                    </div>
-                  </div>
+                  <Slider
+                    value={drivingStyle}
+                    onValueChange={setDrivingStyle}
+                    max={100}
+                    step={1}
+                    className="w-full"
+                  />
                 </div>
               </div>
-
-              {/* Dynamic Prediction Cards */}
-              <section>
-                <h2 className="text-xl font-semibold mb-4">Predicted Component Lifespan</h2>
-                
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
-                  {loading ? (
-                    Array(4).fill(0).map((_, idx) => (
-                      <Card key={idx} className="animate-pulse">
-                        <CardHeader>
-                          <CardTitle className="h-4 bg-gray-200 rounded w-3/4"></CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                          <div className="h-6 bg-gray-200 rounded w-1/2 mb-2"></div>
-                          <div className="h-4 bg-gray-200 rounded w-2/3"></div>
-                        </CardContent>
-                      </Card>
-                    ))
-                  ) : (
-                    predictions.map((prediction) => (
-                      <Card key={prediction.component} className="bg-white border border-black/10 shadow-sm">
-                        <CardHeader>
-                          <CardTitle className="text-lg">{prediction.component}</CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                          <div className="flex items-baseline gap-2">
-                            <span className="text-2xl font-bold">{prediction.lifespan_days}</span>
-                            <span className="text-muted-foreground text-sm">days</span>
-                          </div>
-                          
-                          <div className={`flex items-center gap-1 mt-2 ${getImpactColor(prediction.impact)}`}>
-                            {getImpactIcon(prediction.impact)}
-                            <span className={getImpactColor(prediction.impact)}>
-                              {prediction.impact >= 0 ? '+' : ''}{prediction.impact} days vs normal
-                            </span>
-                          </div>
-                          
-                          <div className="mt-4 h-20">
-                            <ResponsiveContainer width="100%" height="100%">
-                              <LineChart data={generateDegradationCurve(prediction.component, drivingStyle[0])}>
-                                <CartesianGrid stroke="#f0f0f0" strokeDasharray="3 3" vertical={false} />
-                                <XAxis 
-                                  dataKey="day" 
-                                  axisLine={false} 
-                                  tickLine={false} 
-                                  tick={{ fontSize: 8 }}
-                                />
-                                <YAxis 
-                                  domain={[70, 100]} 
-                                  axisLine={false} 
-                                  tickLine={false} 
-                                  tick={{ fontSize: 8 }}
-                                />
-                                <Tooltip 
-                                  contentStyle={{ 
-                                    backgroundColor: 'white', 
-                                    border: '1px solid #e5e7eb', 
-                                    borderRadius: '8px',
-                                    boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
-                                  }} 
-                                />
-                                <Line 
-                                  type="monotone" 
-                                  dataKey="health" 
-                                  stroke="#000" 
-                                  strokeWidth={2} 
-                                  dot={{ fill: '#000', strokeWidth: 0, r: 2 }} 
-                                  activeDot={{ r: 4, stroke: '#000' }} 
-                                />
-                              </LineChart>
-                            </ResponsiveContainer>
-                          </div>
-                        </CardContent>
-                      </Card>
-                    ))
-                  )}
-                </div>
-              </section>
             </TabsContent>
 
             {/* Trip Planner Tab */}
@@ -410,8 +430,8 @@ export default function WhatIfAnalysisPage({ params }: { params: Promise<{ id: s
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
                         <label className="block text-sm font-medium mb-1">Origin</label>
-                        <input 
-                          type="text" 
+                        <input
+                          type="text"
                           className="w-full p-2 border border-gray-300 rounded-md"
                           placeholder="Enter starting city"
                           id="origin"
@@ -419,8 +439,8 @@ export default function WhatIfAnalysisPage({ params }: { params: Promise<{ id: s
                       </div>
                       <div>
                         <label className="block text-sm font-medium mb-1">Destination</label>
-                        <input 
-                          type="text" 
+                        <input
+                          type="text"
                           className="w-full p-2 border border-gray-300 rounded-md"
                           placeholder="Enter destination city"
                           id="destination"
@@ -428,8 +448,8 @@ export default function WhatIfAnalysisPage({ params }: { params: Promise<{ id: s
                       </div>
                       <div>
                         <label className="block text-sm font-medium mb-1">Departure Date</label>
-                        <input 
-                          type="date" 
+                        <input
+                          type="date"
                           className="w-full p-2 border border-gray-300 rounded-md"
                           id="departure-date"
                         />
@@ -446,8 +466,8 @@ export default function WhatIfAnalysisPage({ params }: { params: Promise<{ id: s
                       </div>
                       <div className="md:col-span-2">
                         <label className="block text-sm font-medium mb-1">Estimated Distance (km)</label>
-                        <input 
-                          type="number" 
+                        <input
+                          type="number"
                           className="w-full p-2 border border-gray-300 rounded-md"
                           placeholder="Enter estimated distance"
                           id="distance"
@@ -474,10 +494,10 @@ export default function WhatIfAnalysisPage({ params }: { params: Promise<{ id: s
                           <p className="font-medium text-yellow-800">CAUTION - Recommendations before you go</p>
                         </div>
                       </div>
-                      
+
                       <h3 className="font-medium mb-2">Predicted Trip Impact</h3>
                       <div className="space-y-3">
-                        <div className="flex justify-between items-center p-3 bg-gray-50 rounded-md">
+                        <div className="flex justify-between items-center p-3 bg-muted rounded-md">
                           <span>Brake Pads</span>
                           <span className="text-red-600">Predicted wear: -0.6mm. Remaining life after trip: 12,400 km.</span>
                         </div>
@@ -490,7 +510,7 @@ export default function WhatIfAnalysisPage({ params }: { params: Promise<{ id: s
                           <span>Predicted impact: -0.5% State of Health.</span>
                         </div>
                       </div>
-                      
+
                       <h3 className="font-medium mt-4 mb-2">Pre-Trip Checklist</h3>
                       <div className="space-y-3">
                         <div className="flex items-start p-3 bg-red-50 rounded-md border-l-4 border-red-500">
@@ -517,7 +537,7 @@ export default function WhatIfAnalysisPage({ params }: { params: Promise<{ id: s
                       </div>
                     </CardContent>
                   </Card>
-                  
+
                   <Card>
                     <CardHeader>
                       <CardTitle>Quick Actions</CardTitle>

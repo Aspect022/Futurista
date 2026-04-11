@@ -1,11 +1,17 @@
-import { GeistSans } from 'geist/font/sans';
+import { Inter } from 'next/font/google';
 import type { Metadata } from 'next';
 import './globals.css';
 import { ThemeProvider } from '@/components/theme-provider';
+import { Toaster } from 'sonner';
+
+const inter = Inter({
+  subsets: ['latin'],
+  variable: '--font-sans',
+});
 
 export const metadata: Metadata = {
-  title: 'Futurista - Predictive Vehicle Maintenance',
-  description: 'AI-powered predictive maintenance for vehicles',
+  title: 'Futurista — Your Car\'s AI Mechanic',
+  description: 'AI-powered car health assistant that tells you what needs fixing, when it will break, and what to do about it — in plain English.',
   icons: {
     icon: '/logo.jpg',
   },
@@ -17,8 +23,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" suppressHydrationWarning className={GeistSans.variable}>
-      <body className="bg-background text-foreground">
+    <html lang="en" suppressHydrationWarning className={inter.variable}>
+      <body className="bg-background text-foreground font-sans">
         <ThemeProvider
           attribute="class"
           defaultTheme="light"
@@ -26,6 +32,17 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           {children}
+          <Toaster
+            position="top-right"
+            richColors
+            closeButton
+            toastOptions={{
+              duration: 8000,
+              style: {
+                fontSize: '14px',
+              },
+            }}
+          />
         </ThemeProvider>
       </body>
     </html>

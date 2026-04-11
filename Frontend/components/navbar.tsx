@@ -6,14 +6,14 @@ import { Button } from '@/components/ui/button';
 import { ThemeToggle } from '@/components/theme-toggle';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useScrollReveal } from '@/hooks/use-scroll-reveal';
-import { Car, Wrench, TrendingUp, Gauge, Menu, X } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
 
 interface UnifiedNavbarProps {
   includeFleetScore?: boolean;
   fleetHealth?: number;
 }
 
-export function UnifiedNavbar({ includeFleetScore = false, fleetHealth = 72 }: UnifiedNavbarProps) {
+export function UnifiedNavbar({ includeFleetScore = false, fleetHealth = 48 }: UnifiedNavbarProps) {
   const [open, setOpen] = useState(false);
   const isVisible = useScrollReveal(80);
 
@@ -49,31 +49,24 @@ export function UnifiedNavbar({ includeFleetScore = false, fleetHealth = 72 }: U
               <Link href="/" className="text-sm text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-white transition-colors">
                 Home
               </Link>
-              <Link href="/#features" className="text-sm text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-white transition-colors">
-                Features
+              <Link href="/dashboard-new" className="text-sm text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-white transition-colors">
+                My Car
               </Link>
               <Link href="/what-if-analysis" className="text-sm text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-white transition-colors">
-                What-If Analysis
-              </Link>
-              <Link href="/reports" className="text-sm text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-white transition-colors">
-                Fleet Reports
+                Road Trip Check
               </Link>
               <Link href="/appointment-booking" className="text-sm text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-white transition-colors">
-                Book Appointment
-              </Link>
-              <Link href="/dashboard-new" className="text-sm text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-white transition-colors">
-                Dashboard
+                Book a Mechanic
               </Link>
             </div>
 
             <div className="flex items-center gap-2">
-              {/* Fleet Score Card - Only show when includeFleetScore is true */}
+              {/* Car Status Pill — replaces Fleet Health Score */}
               {includeFleetScore && (
-                <div className="hidden md:flex items-center gap-2 bg-gray-100 dark:bg-gray-800 rounded-lg px-3 py-2 text-sm">
-                  <Gauge className="h-4 w-4 text-blue-500" />
-                  <span className="font-medium text-gray-900 dark:text-white">Fleet Health</span>
-                  <span className="font-bold text-gray-900 dark:text-white">{fleetHealth}%</span>
-                </div>
+                <Link href="/vehicle/car-3/predictive-maintenance" className="hidden md:flex items-center gap-2 bg-red-50 dark:bg-red-900/30 rounded-lg px-3 py-2 text-sm border border-red-200 dark:border-red-800">
+                  <div className="h-2 w-2 rounded-full bg-red-500 animate-pulse" />
+                  <span className="font-medium text-red-700 dark:text-red-300">Toyota Innova — {fleetHealth}% ⚠️</span>
+                </Link>
               )}
               
               <ThemeToggle />
@@ -96,9 +89,9 @@ export function UnifiedNavbar({ includeFleetScore = false, fleetHealth = 72 }: U
                 </Button>
               </div>
               
-              <Link href="/dashboard" className="ml-2 hidden md:block">
+              <Link href="/dashboard-new" className="ml-2 hidden md:block">
                 <Button className="bg-black text-white hover:bg-black/90 dark:bg-white dark:text-black dark:hover:bg-gray-200">
-                  Get Started
+                  Check My Car
                 </Button>
               </Link>
             </div>
@@ -118,23 +111,17 @@ export function UnifiedNavbar({ includeFleetScore = false, fleetHealth = 72 }: U
                   <Link href="/" className="py-2 text-sm text-gray-700 dark:text-gray-300" onClick={() => setOpen(false)}>
                     Home
                   </Link>
-                  <Link href="/#features" className="py-2 text-sm text-gray-700 dark:text-gray-300" onClick={() => setOpen(false)}>
-                    Features
+                  <Link href="/dashboard-new" className="py-2 text-sm text-gray-700 dark:text-gray-300" onClick={() => setOpen(false)}>
+                    My Car
                   </Link>
                   <Link href="/what-if-analysis" className="py-2 text-sm text-gray-700 dark:text-gray-300" onClick={() => setOpen(false)}>
-                    What-If Analysis
-                  </Link>
-                  <Link href="/reports" className="py-2 text-sm text-gray-700 dark:text-gray-300" onClick={() => setOpen(false)}>
-                    Fleet Reports
+                    Road Trip Check
                   </Link>
                   <Link href="/appointment-booking" className="py-2 text-sm text-gray-700 dark:text-gray-300" onClick={() => setOpen(false)}>
-                    Book Appointment
+                    Book a Mechanic
                   </Link>
-                  <Link href="/dashboard-new" className="py-2 text-sm text-gray-700 dark:text-gray-300" onClick={() => setOpen(false)}>
-                    Dashboard
-                  </Link>
-                  <Link href="/dashboard" onClick={() => setOpen(false)} className="mt-2">
-                    <Button className="w-full bg-black text-white hover:bg-black/90 dark:bg-white dark:text-black dark:hover:bg-gray-200">Get Started</Button>
+                  <Link href="/dashboard-new" onClick={() => setOpen(false)} className="mt-2">
+                    <Button className="w-full bg-black text-white hover:bg-black/90 dark:bg-white dark:text-black dark:hover:bg-gray-200">Check My Car</Button>
                   </Link>
                 </div>
               </motion.div>

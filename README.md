@@ -1,119 +1,144 @@
-# Autonomous Vehicle Predictive Maintenance Platform
+# Futurista — Your Car's AI Mechanic
 
-![Version](https://img.shields.io/badge/version-1.0-blue)
-![Last Updated](https://img.shields.io/badge/last%20updated-October%2013%2C%202025-green)
-![Project Code](https://img.shields.io/badge/code-AVPM--2025-lightgrey)
+**Futurista** is an AI-powered car health assistant that reads your vehicle's engine data and tells you — in plain English — what needs fixing, when it will break, and what to do about it. Under the hood, a multi-agent AI system analyses sensor patterns to predict failures before they happen, so you never get stranded.
 
-## Vision
+---
 
-Build an AI-powered autonomous predictive maintenance platform for vehicles that prevents breakdowns before they occur, autonomously schedules service appointments, and creates a closed feedback loop to manufacturing for continuous quality improvement.
+## What It Does
 
-## Core Value Proposition
+- **Plain English Health Reports** — AI translates complex sensor data into simple language anyone can understand
+- **Predicts Failures Before They Happen** — Shows exactly which parts will fail and how many days you have left
+- **"Ask My Car" AI Chat** — Ask questions like "Is my car safe to drive today?" and get instant, clear answers
+- **Road Trip Safety Check** — Planning a trip? The AI checks if your car can handle it
+- **Book a Mechanic** — One tap to find the nearest service centre with estimated costs
+- **Real-Time Warnings** — Get notified the moment something starts wearing down
+- **Data Input & Analysis** — Feed in real engine data (RPM, brake thickness, voltage) and watch predictions update live
 
-*   **For Vehicle Owners:** Peace of mind through proactive maintenance, reduced breakdown incidents by 93%, and personalized trip planning with safety checks.
-*   **For Service Centers:** 50% improvement in utilization through predictable scheduling and optimized workload distribution.
-*   **For Manufacturers:** 31% reduction in defect rates through automated RCA/CAPA analysis and manufacturing feedback loops.
-
-## Features
-
-*   **Predictive Maintenance:** Predicts potential vehicle failures with high accuracy.
-*   **Autonomous Service Scheduling:** Schedules service appointments automatically based on predicted failures.
-*   **3D Vehicle Visualization:** Interactive 3D models for visualizing vehicle health and component data.
-*   **Real-time Monitoring:** Live monitoring of vehicle telematics data.
-*   **Trip Planning:** Pre-trip safety checks and recommendations.
-*   **User-friendly Dashboard:** A comprehensive dashboard for vehicle owners to view vehicle health, and service history.
-
-## Tech Stack
-
-### Frontend
-
-*   **Framework:** Next.js 14 (with App Router)
-*   **UI Components:** React 18, Tailwind CSS, shadcn/ui
-*   **3D Visualization:** React Three Fiber (R3F), Three.js
-*   **Data Visualization:** Recharts, ECharts
-*   **State Management:** Zustand
-
-### Backend
-
-*   **Framework:** Python 3.11+ (FastAPI)
-*   **Real-time Communication:** Node.js 20+
-*   **Data Layer:** TimescaleDB, PostgreSQL, Kafka, Redis
-*   **ML/AI:** TensorFlow/PyTorch, XGBoost/LightGBM, Scikit-learn
-*   **Infrastructure:** Docker, Kubernetes
+---
 
 ## Architecture
 
-The application is built with a separate frontend and backend.
+```
+┌─────────────────────────────────────────────────────────────┐
+│                        DRIVER                                │
+│               (Opens Futurista Web App)                       │
+└─────────────────────┬───────────────────────────────────────┘
+                      │
+                      ▼
+┌─────────────────────────────────────────────────────────────┐
+│              Futurista Frontend (Next.js 14)                  │
+│                                                               │
+│  ┌──────────┐  ┌──────────┐  ┌─────────┐  ┌──────────────┐  │
+│  │ My Car   │  │ Health   │  │ Ask My  │  │ Road Trip    │  │
+│  │ Dashboard│  │ Report   │  │ Car Chat│  │ Safety Check │  │
+│  └──────────┘  └──────────┘  └─────────┘  └──────────────┘  │
+│                                                               │
+│  ┌──────────────────────────────────────────────────────┐    │
+│  │        Next.js API Routes (Groq / Llama 3)           │    │
+│  │  /health-summary  /predictive-explain  /ask-car      │    │
+│  └──────────────────────────────────────────────────────┘    │
+└─────────────────────┬───────────────────────────────────────┘
+                      │
+                      ▼
+┌─────────────────────────────────────────────────────────────┐
+│            Master Agent Orchestrator (FastAPI)                │
+│                                                               │
+│  ┌────────────┐ ┌──────────┐ ┌───────────┐ ┌─────────────┐  │
+│  │ Data       │ │ Diagnosis│ │ Customer  │ │ Scheduling  │  │
+│  │ Analysis   │ │ Worker   │ │ Engagement│ │ Worker      │  │
+│  └────────────┘ └──────────┘ └───────────┘ └─────────────┘  │
+│  ┌────────────┐ ┌──────────────────────┐                     │
+│  │ Feedback   │ │ Manufacturing        │                     │
+│  │ Worker     │ │ Insights Worker      │                     │
+│  └────────────┘ └──────────────────────┘                     │
+│                                                               │
+│  ┌──────────────────┐                                        │
+│  │ UEBA Security    │  (AI agent risk monitoring)            │
+│  └──────────────────┘                                        │
+└─────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## Tech Stack
+
+| Layer | Technology |
+|-------|-----------|
+| Frontend | Next.js 14 (App Router), TypeScript, Tailwind CSS, shadcn/ui |
+| AI/LLM | Groq Cloud API, Llama 3 70B |
+| Charts | Recharts |
+| 3D Visualisation | React Three Fiber, Three.js |
+| Notifications | Sonner |
+| Backend | FastAPI (Python), Multi-Agent Orchestration |
+| Infrastructure | Docker, Docker Compose, Redis |
+| Security | UEBA (User and Entity Behavior Analytics) |
+
+---
+
+## How to Run It
 
 ### Frontend
 
-The frontend is a Next.js application that provides a user-friendly interface for vehicle owners. It includes a dashboard for monitoring vehicle health, scheduling service appointments, and visualizing vehicle data in 3D.
+```bash
+cd Frontend
+npm install
+npm run dev
+```
 
-### Backend
+Open [http://localhost:3000](http://localhost:3000)
 
-The backend is a microservices-based architecture that handles data ingestion, processing, and prediction. It consists of several worker agents that perform specific tasks, such as data analysis, diagnosis, and customer engagement. The Master Agent orchestrates the entire process.
+### Backend (optional — runs with mock data without it)
 
-## Getting Started
+```bash
+cd Backend
+docker-compose up -d
+```
 
-### Prerequisites
+### Environment Variables
 
-*   Node.js and npm
-*   Python and pip
-*   Docker
+Create `Frontend/.env.local`:
 
-### Installation
+```
+GROQ_API_KEY=your_groq_api_key_here
+```
 
-1.  **Clone the repository:**
+Get a free API key at [console.groq.com](https://console.groq.com)
 
-    ```bash
-    git clone https://github.com/your-username/your-repository.git
-    ```
+---
 
-2.  **Install frontend dependencies:**
+## Demo Script (60 seconds)
 
-    ```bash
-    cd Frontend
-    npm install
-    ```
+> **[OPEN — 0:00-0:08]**
+> "Imagine you're driving to work and your car suddenly breaks down. The tow truck costs ₹5,000. The emergency repair costs ₹25,000. But what if your car could have WARNED you… three weeks ago? That's Futurista."
+>
+> **[SHOW THE APP — 0:08-0:20]**
+> *Open the app. Land on "Your Toyota Innova — 48% Health"*
+> "This is my car's health dashboard. Right away, I see my car is at 48% health — that's red. The AI has already checked every part and it's telling me: 'Your brakes have about 12 days left.'"
+>
+> **[THE WOW MOMENT — 0:20-0:35]**
+> *Click "Explain" on the Brake Pads card*
+> "But here's the magic. I click 'Explain' — and our AI, powered by Llama 3, translates the raw sensor data into plain English. It says: 'Your brake pads have worn thin from city driving. You might hear squeaking when stopping.' My grandmother could understand this."
+>
+> **[THE DEPTH — 0:35-0:50]**
+> *Scroll to data input panel, adjust brake pad slider*
+> "The app also lets me input real sensor data. Watch — when I slide brake pad thickness from 5mm down to 2mm, the prediction instantly changes to Critical. And I can ask my car anything…"
+> *Click 'Ask My Car' → type 'Is it safe to drive today?'*
+>
+> **[CLOSE — 0:50-1:00]**
+> "Under the hood, this runs on a multi-agent AI backend with six specialised workers — but the driver never sees any of that complexity. They just see: 'Fix your brakes in 12 days.' That's Futurista — your car's AI mechanic."
 
-3.  **Install backend dependencies:**
+---
 
-    ```bash
-    cd ../Backend
-    pip install -r requirements-master.txt
-    pip install -r requirements-mockapi.txt
-    pip install -r requirements-streamlit.txt
-    pip install -r requirements-worker.txt
-    ```
+## Demo Video
 
-### Running the Application
+[Coming soon]
 
-1.  **Start the backend services:**
+---
 
-    ```bash
-    cd Backend
-    docker-compose up -d
-    ```
+## Team
 
-2.  **Start the frontend application:**
+Built with ❤️ for the Hackathon
 
-    ```bash
-    cd ../Frontend
-    npm run dev
-    ```
+---
 
-The application will be available at `http://localhost:3000`.
-
-## Contributing
-
-We welcome contributions to the Autonomous Vehicle Predictive Maintenance Platform. Please follow these steps to contribute:
-
-1.  Fork the repository.
-2.  Create a new branch for your feature or bug fix.
-3.  Make your changes and commit them with a clear message.
-4.  Push your changes to your fork.
-5.  Create a pull request to the main repository.
-
-## License
-
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+*Futurista — Your car's AI mechanic.*

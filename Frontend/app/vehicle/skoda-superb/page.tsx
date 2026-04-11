@@ -93,10 +93,7 @@ const trends = {
   ],
 };
 
-export default function SkodaSuperbPage({ params }: { params: { id: string } }) {
-  // Placeholder: validate vehicle id if needed
-  if (!params?.id) return notFound()
-
+export default function SkodaSuperbPage() {
   const v = skodaSuperbData;
 
   return (

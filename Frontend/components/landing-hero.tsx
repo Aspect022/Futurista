@@ -1,49 +1,7 @@
 "use client";
 
 import { motion, useReducedMotion } from "framer-motion";
-import Image from "next/image";
-import { useState } from "react";
-
-// Small decorative cloud (respects reduced motion)
-function Cloud({
-  className = "",
-  delay = 0,
-  scale = 1,
-}: {
-  className?: string;
-  delay?: number;
-  scale?: number;
-}) {
-  const prefersReducedMotion = useReducedMotion();
-  return (
-    <motion.div
-      aria-hidden="true"
-      className={`absolute ${className}`}
-      initial={{ opacity: 0 }}
-      animate={
-        prefersReducedMotion
-          ? { opacity: 0.8 }
-          : { opacity: 0.9, x: [0, 12, 0], opacity: [0.8, 0.95, 0.8] }
-      }
-      transition={{
-        duration: 14,
-        repeat: Number.POSITIVE_INFINITY,
-        ease: "easeInOut",
-        delay,
-      }}
-      style={{ transformOrigin: "center" }}
-    >
-      <div className="relative" style={{ transform: `scale(${scale})` }}>
-        {/* three overlapping puffs */}
-        <span className="absolute left-0 top-2 h-6 w-12 rounded-full bg-white/95 shadow-[0_1px_0_#0000001a]" />
-        <span className="absolute left-7 top-0 h-8 w-10 rounded-full bg-white/95 shadow-[0_1px_0_#0000001a]" />
-        <span className="absolute left-14 top-3 h-6 w-12 rounded-full bg-white/95 shadow-[0_1px_0_#0000001a]" />
-        {/* base */}
-        <span className="relative block h-6 w-28 rounded-full bg-white/95 shadow-[0_1px_0_#0000001a]" />
-      </div>
-    </motion.div>
-  );
-}
+import Link from "next/link";
 
 export function LandingHero() {
   const prefersReducedMotion = useReducedMotion();
@@ -91,9 +49,26 @@ export function LandingHero() {
             transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
             className="mt-6 text-lg text-gray-200 md:text-xl max-w-2xl mx-auto"
           >
-            Experience the future of fleet management with AI-driven predictive
-            maintenance that keeps your vehicles on the road.
+            Futurista uses AI to check your car&apos;s engine data and tell you
+            — in plain English — what needs fixing and when.
           </motion.p>
+
+          <motion.div
+            initial={prefersReducedMotion ? false : { y: 20, opacity: 0 }}
+            animate={prefersReducedMotion ? {} : { y: 0, opacity: 1 }}
+            transition={{ duration: 0.8, ease: "easeOut", delay: 0.4 }}
+            className="mt-8"
+          >
+            <Link
+              href="/dashboard-new"
+              className="inline-flex items-center px-8 py-4 rounded-full bg-white text-black font-semibold text-lg hover:bg-white/90 transition-all hover:scale-[1.02] active:scale-[0.98] shadow-lg"
+            >
+              Check My Car Now — It&apos;s Free
+              <svg className="w-5 h-5 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+              </svg>
+            </Link>
+          </motion.div>
         </div>
       </div>
 

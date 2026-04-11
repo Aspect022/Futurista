@@ -1,53 +1,62 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-
-const cars = [
-  { id: "car-1", name: "Skoda Superb", year: 2023, mileage: 12500 },
-  { id: "car-2", name: "Toyota Fortuner", year: 2024, mileage: 8900 },
-  { id: "car-3", name: "Toyota Innova", year: 2023, mileage: 15600 },
-];
+import { UnifiedNavbar } from "@/components/navbar";
+import { ArrowLeft } from "lucide-react";
 
 export default function WhatIfAnalysisIntro() {
-  const router = useRouter();
-
   return (
-    <div className="min-h-dvh bg-background text-foreground p-4">
-      <div className="max-w-4xl mx-auto py-12">
+    <div className="min-h-dvh bg-background text-foreground">
+      <UnifiedNavbar />
+      <div className="pt-20 max-w-4xl mx-auto px-4 py-12">
+        <Link
+          href="/dashboard-new"
+          className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground mb-8"
+        >
+          <ArrowLeft className="h-4 w-4" />
+          Back to My Car
+        </Link>
+
         <div className="text-center mb-12">
-          <h1 className="text-3xl md:text-4xl font-bold mb-4">What-If Analysis</h1>
+          <h1 className="text-3xl md:text-4xl font-bold mb-4">Road Trip Safety Check</h1>
           <p className="text-muted-foreground max-w-2xl mx-auto">
-            See how your driving style impacts your vehicle's health. Select a vehicle to analyze.
+            Planning a trip? Let&apos;s make sure your car can handle it.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {cars.map((car) => (
-            <div
-              key={car.id}
-              className="bg-card rounded-2xl border border-border p-6 shadow-sm hover:shadow-md transition-shadow"
-            >
-              <h2 className="text-xl font-bold mb-2 text-card-foreground">{car.name}</h2>
-              <div className="space-y-2 text-sm text-muted-foreground mb-4">
-                <div>Year: {car.year}</div>
-                <div>Mileage: {car.mileage.toLocaleString()} km</div>
+        {/* Auto-selected vehicle — skip the picker */}
+        <div className="max-w-md mx-auto">
+          <div className="bg-card rounded-2xl border border-border p-6 shadow-sm mb-6">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="h-10 w-10 rounded-full bg-red-100 flex items-center justify-center">
+                <span className="text-red-600 font-bold text-sm">48%</span>
               </div>
-              <Button
-                className="w-full"
-                onClick={() => router.push(`/vehicle/${car.id}/what-if-analysis`)}
-              >
-                Analyze This Vehicle
-              </Button>
+              <div>
+                <h2 className="text-xl font-bold text-card-foreground">Toyota Innova</h2>
+                <p className="text-sm text-muted-foreground">2023 · 15,600 km</p>
+              </div>
             </div>
-          ))}
-        </div>
+            <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 mb-4">
+              <p className="text-sm text-amber-800">
+                ⚠️ Your car has some parts that need attention. The trip analysis will factor this in.
+              </p>
+            </div>
+            <Button
+              className="w-full"
+              onClick={() => {
+                window.location.href = "/vehicle/car-3/what-if-analysis";
+              }}
+            >
+              Analyse My Trip
+            </Button>
+          </div>
 
-        <div className="mt-8 text-center">
-          <Link href="/dashboard-new" className="text-primary hover:underline">
-            ← Back to Dashboard
-          </Link>
+          <div className="text-center">
+            <Link href="/dashboard-new" className="text-primary hover:underline text-sm">
+              ← Back to My Car
+            </Link>
+          </div>
         </div>
       </div>
     </div>

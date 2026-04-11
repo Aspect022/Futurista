@@ -26,13 +26,13 @@ const cars = [
 export default function AppointmentBookingPage() {
   const router = useRouter();
   const [formData, setFormData] = useState({
-    carId: "car-1",
+    carId: "car-3",
     name: "",
     email: "",
     phone: "",
     date: "",
     time: "",
-    serviceType: "general",
+    serviceType: "brake-inspection",
     additionalNotes: "",
   });
 
