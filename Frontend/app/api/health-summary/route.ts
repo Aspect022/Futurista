@@ -44,7 +44,7 @@ Write ONLY the 3 bullet points, separated by newlines. No numbering, no dashes, 
 
     const completion = await groq.chat.completions.create({
       messages: [{ role: "user", content: prompt }],
-      model: "llama3-70b-8192",
+      model: "llama-3.3-70b-versatile",
       temperature: 0.3,
       max_tokens: 300,
     });

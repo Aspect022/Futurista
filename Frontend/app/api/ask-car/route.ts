@@ -35,7 +35,7 @@ Current vehicle status:
         { role: "system", content: systemPrompt },
         { role: "user", content: question },
       ],
-      model: "llama3-70b-8192",
+      model: "llama-3.3-70b-versatile",
       temperature: 0.4,
       max_tokens: 200,
     });
